@@ -1,21 +1,18 @@
-# set official golang image as base
-FROM golang:1.23.2
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /source
 
-# set working directory inside the container
+# copy csproj and restore as distinct layers
+COPY *.sln .
+COPY dotnet_server/*.csproj ./
+RUN dotnet restore
+
+# copy everything else and build app
+COPY dotnet_server/. ./
+RUN dotnet publish -c release -o /app --no-restore
+
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-
-# copy go mod files and download dependencies
-COPY src/go.mod src/go.sum ./
-RUN go mod download
-
-# copy remaining source code
-COPY src/ .
-
-# compile the go server binary
-RUN go build -o main .
-
-# expose the port the app will run on
-EXPOSE 8080
-
-# execute the binary
-CMD ["./main"]
+COPY --from=build /app ./
+ENTRYPOINT ["dotnet", "dotnet_server.dll"]

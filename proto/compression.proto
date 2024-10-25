@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package compression;
+
+message CompressRequest {
+  // video binary data
+  string video_data = 1;
+  // 2 choices for codec
+  string codec = 2;
+}
+
+message CompressResponse {
+  bool success = 1;
+  // optional error/status message
+  string message = 2;
+  // compressed video binary data
+  bytes compressed_video = 3;
+}
+
+service CompressionService {
+  rpc Compress(CompressRequest) returns (CompressResponse);
+}

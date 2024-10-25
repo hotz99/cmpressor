@@ -11,8 +11,7 @@ services:
       - pg_data:/var/lib/postgresql/data
       - ./sql_scripts:/docker-entrypoint-initdb.d/
     networks:
-      - pg_network
-    # is healthy for first check but not for the next checks ?
+      - backend_network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 5s
@@ -33,28 +32,27 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - pg_network
+      - backend_network
 
-  go_server:
+  dotnet_server:
     build: .
-    command: go run main.go
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - 8080:8080
+      - 3000:3000
     environment:
+      - ASPNETCORE_URLS=http://+:3000
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
       - DB_NAME=${POSTGRES_DB}
     networks:
-      - pg_network
-    working_dir: /app
+      - backend_network
 
 networks:
-  pg_network:
+  backend_network:
 
 volumes:
   pg_data:

@@ -1,72 +1,78 @@
-# YouTube Clone Project Plan
+# Video Compression Platform Project Plan
 
 ## High-Level Overview
-This project involves creating a YouTube-like platform where users can upload videos. Videos will be compressed internally to save storage, and the system will simulate high traffic for specific videos to mimic viral content. The architecture involves multiple services for video processing, storage, streaming, and metadata management.
+This project involves creating a platform for video compression where users can upload videos. The system allows for different tiers: free users can upload up to 100MB per 24 hours, and paid users can upload up to 1GB per 24 hours. The platform compresses videos to save storage and enables users to download or view their compressed videos. The architecture leverages multiple services, each focusing on specific functionalities such as video processing, compression, storage, and user management.
 
 ## Services Breakdown
 
 ### 1. Web Client
-- **Responsibilities**: 
-  - Users can upload videos, view their own and others' videos, search, and see video statistics.
+- **Responsibilities**:
+  - Users can upload videos, view the list of their uploaded and compressed videos, and monitor their storage quota.
+  - Allows users to switch between free and paid tiers.
 - **Tech Stack**: SvelteKit.
 
 ### 2. Video Upload and Processing Service
-- **Responsibilities**: 
-  - Accept video uploads, store them temporarily, and forward them to the compression service for processing.
-- **Implementation**: Uses an API to accept file uploads and stores them in temporary storage.
+- **Responsibilities**:
+  - Accept video uploads, check the user's tier and enforce the upload quota.
+  - Forward the video to the compression service for processing.
+- **Implementation**: Uses an ASP.NET-based API to accept file uploads and store them in temporary storage.
 
-### 3. Compression/Decompression Engine Service
-- **Responsibilities**: 
+### 3. Compression Engine Service
+- **Responsibilities**:
   - Compress uploaded videos to reduce storage costs.
-  - Support multiple compression algorithms for optimal balance between quality and storage.
-  - Decompress videos on-the-fly for playback when needed.
-- **Implementation**: A dedicated service interfacing with a compression library.
+  - Support multiple compression algorithms to find an optimal balance between quality and storage.
+- **Implementation**: A dedicated Rust-based service interfacing with a video compression library.
 
-### 4. Video Streaming Service
-- **Responsibilities**: 
-  - Serve video content to users.
-  - Support multiple resolutions for adaptive bitrate streaming.
-- **Implementation**: Uses a video server that serves compressed videos and adapts resolution dynamically.
+### 4. Video Storage Service
+- **Responsibilities**:
+  - Persist compressed videos and store metadata for future reference.
+  - Keep track of the last **n** compressed videos per user.
+- **Implementation**: Uses a PostgreSQL database for storing video metadata and keeping a reference to the compressed files.
 
-### 5. Video Metadata and Search Service
-- **Responsibilities**: 
-  - Store metadata like video title, description, tags, uploader information, and statistics.
-  - Support efficient searching and filtering.
-- **Implementation**: Uses a relational database (like PostgreSQL) and an indexing solution (like Elasticsearch).
+### 5. Video Quota Management Service
+- **Responsibilities**:
+  - Enforce tier-based upload quotas for free and paid users (100MB vs. 1GB per 24 hours).
+  - Notify users when they are nearing their quota limits.
+- **Implementation**: Integrated with the user management system and ASP.NET API gateway.
 
-### 6. Popular Video Simulation Service
-- **Responsibilities**: 
-  - Simulate high traffic for selected videos to stress test compression, storage, and streaming infrastructure.
-- **Implementation**: Generate automated requests for specific video endpoints.
+### 6. API Gateway
+- **Responsibilities**:
+  - Route incoming requests to appropriate services such as video upload, compression, storage, and metadata.
+  - Provide secure endpoints for managing user authentication and authorization.
+- **Implementation**: ASP.NET-based gateway for routing and API management.
 
-## Simulating Highly Popular Videos
-1. **Identify Popular Videos**: Select a set of videos to receive simulated traffic.
-2. **Automated Traffic Generation**: Implement a script or service that sends multiple requests for these videos over time.
-3. **Load Balancing and Caching**: Use caching (like Redis) to efficiently serve highly requested videos.
+## Quota Management
+
+1. **Free Tier**: Users can upload up to 100MB per 24 hours.
+2. **Paid Tier**: Users can upload up to 1GB per 24 hours.
+3. **Quota Enforcement**: Implement quota enforcement by tracking user uploads and timestamps.
 
 ## Tech Stack
 
 - **Web Client**: SvelteKit.
-- **Web Server**: Go.
+- **API Gateway**: ASP.NET.
+- **Compression Engine**: Rust.
 - **Internal Caching**: Redis.
 - **Internal Communication Paradigm**: Event-driven architecture with Kafka.
 - **Orchestration and Containerization**: Kubernetes and Docker.
-- **Database**: PostgreSQL for metadata and user data.
-- **Search and Indexing**: Elasticsearch.
+- **Database**: PostgreSQL for storing video metadata and compressed versions of the last **n** videos per user.
+- **Search and Indexing**: Elasticsearch for indexing metadata for efficient searching and filtering.
 
 ## Example Architecture Diagram
 
-1. **User Client** → **API Gateway** → **Video Upload Service** → **Compression Engine Service** → **Storage**
-2. **User Client** → **API Gateway** → **Video Streaming Service** → **Storage**
-3. **API Gateway** → **Video Metadata and Search Service** → **Database**
+1. **User Client** → **API Gateway (ASP.NET)** → **Video Upload and Processing Service** → **Compression Engine (Rust)** → **Storage**
+2. **User Client** → **API Gateway (ASP.NET)** → **Video Storage Service** → **Database (PostgreSQL)**
+3. **API Gateway** → **Quota Management Service** → **User Management System**
 
 ## Key Challenges to Tackle
-1. **Efficient Compression**: Develop an algorithm selection strategy that balances quality and storage savings.
-2. **Load Management**: Implement caching strategies to handle highly popular videos without straining the backend.
-3. **Scaling**: Use Kubernetes to scale the compression service and streaming services independently.
-4. **Security and Authentication**: Implement user authentication and video ownership rules to protect against unauthorized access.
+1. **Efficient Compression**: Develop an algorithm selection strategy that balances quality and storage savings in the Rust-based compression engine.
+2. **Quota Management**: Accurately enforce user upload quotas while providing real-time notifications and insights.
+3. **Load Management**: Implement caching strategies and efficient file storage to manage highly frequent uploads or downloads.
+4. **Scaling and Resource Management**: Use Kubernetes to scale the compression engine and other services independently based on demand.
+5. **Security and Authentication**: Implement robust user authentication and access control to safeguard uploaded content.
 
 ## Next Steps
-1. **Start with the Core Services**: Web client, upload processing, video storage, and video streaming.
-2. **Develop the Compression Engine**: Choose and experiment with different compression algorithms, tracking metrics like compression ratio and time.
-3. **Simulate High Traffic**: Implement a traffic simulation tool to test system scalability.
+1. **Start with the Core Services**: Develop the ASP.NET-based API Gateway, upload processing, video storage, and basic user management.
+2. **Build and Test the Compression Engine**: Develop the Rust-based compression engine, experiment with different compression algorithms, and track performance metrics.
+3. **Implement Quota Management**: Set up a quota enforcement mechanism and notifications to monitor user uploads.
+4. **Simulate High Traffic**: Implement a traffic simulation tool to test system scalability and reliability under high load conditions.

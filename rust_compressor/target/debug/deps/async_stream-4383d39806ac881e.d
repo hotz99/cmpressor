@@ -1,0 +1,10 @@
+/home/pedro/projects/cmpressor/rust_compressor/target/debug/deps/libasync_stream-4383d39806ac881e.rmeta: /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/lib.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/async_stream.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/next.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/yielder.rs
+
+/home/pedro/projects/cmpressor/rust_compressor/target/debug/deps/libasync_stream-4383d39806ac881e.rlib: /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/lib.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/async_stream.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/next.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/yielder.rs
+
+/home/pedro/projects/cmpressor/rust_compressor/target/debug/deps/async_stream-4383d39806ac881e.d: /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/lib.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/async_stream.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/next.rs /home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/yielder.rs
+
+/home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/lib.rs:
+/home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/async_stream.rs:
+/home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/next.rs:
+/home/pedro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-stream-0.3.6/src/yielder.rs:
