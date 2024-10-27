@@ -53,3 +53,8 @@
 /home/pedro/projects/cmpressor/dotnet_server/obj/Debug/net8.0/ref/dotnet_server.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.AspNetCore.Server.Kestrel.Https.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Google.Protobuf.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Core.Api.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Net.Client.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Net.Common.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/RabbitMQ.Client.dll

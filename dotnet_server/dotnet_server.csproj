@@ -14,11 +14,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.10" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <Protobuf Include="../proto/compression.proto" GrpcServices="Client" />
   </ItemGroup>
 

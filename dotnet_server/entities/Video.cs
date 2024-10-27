@@ -1,3 +1,5 @@
+namespace Entities;
+
 public class Video
 {
   public int VideoId { get; set; }  // Maps to video_id in the database

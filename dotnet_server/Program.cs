@@ -1,50 +1,44 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var host = Environment.GetEnvironmentVariable("DB_HOST");
-var port = Environment.GetEnvironmentVariable("DB_PORT");
-var user = Environment.GetEnvironmentVariable("DB_USER");
-var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
-var database = Environment.GetEnvironmentVariable("DB_NAME");
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 
-var connectionString = $"Host={host};Port={port};Username={user};Password={password};Database={database}";
+var dbConnString = $"Host={dbHost};Port={dbPort};Username={dbUser};Password={dbPassword};Database={dbName}";
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<Database.AppDbContext>(options =>
+    options.UseNpgsql(dbConnString));
+
+builder.Services.AddSingleton<RabbitMQ.Client.ConnectionFactory>(new RabbitMQ.Client.ConnectionFactory
+{
+  // TODO use env vars
+  HostName = "localhost",
+  Port = 5672
+});
+
+builder.Services.AddSingleton<CompressionAMQP.RpcProducer>();
+
+builder.Services.AddSingleton<Handlers>();
 
 var app = builder.Build();
 
-app.MapPost("/upload", async (HttpRequest request) =>
+app.Use(async (context, next) =>
 {
-  if (!request.HasFormContentType)
-  {
-    return Results.BadRequest("request must be multipart/form-data.");
-  }
+  var httpMaxRequestBodySizeFeature = context.Features.Get<IHttpMaxRequestBodySizeFeature>();
 
-  var form = await request.ReadFormAsync();
-  var file = form.Files.GetFile("file");
+  // TODO base limit on user role (free vs paid)
+  if (httpMaxRequestBodySizeFeature is not null)
+    // 100MB limit
+    httpMaxRequestBodySizeFeature.MaxRequestBodySize = 100_000_000;
 
-  if (file == null || file.Length == 0)
-  {
-    return Results.BadRequest("no file attached");
-  }
-
-  var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-
-  if (!Directory.Exists(uploadPath))
-  {
-    Directory.CreateDirectory(uploadPath);
-  }
-
-  var filePath = Path.Combine(uploadPath, file.FileName);
-  using (var stream = new FileStream(filePath, FileMode.Create))
-  {
-    await file.CopyToAsync(stream);
-  }
-
-  return Results.Ok();
+  await next(context);
 });
 
+app.MapPost("/upload", async (HttpRequest req, Handlers handlers) => await handlers.HandleCompressionRequest(req));
 
 app.Run();

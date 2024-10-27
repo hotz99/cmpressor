@@ -1,3 +1,5 @@
+namespace Entities;
+
 public class User
 {
   public int UserId { get; set; }  // Maps to user_id in the database
@@ -6,6 +8,5 @@ public class User
   public string PasswordHash { get; set; } = string.Empty;  // Maps to password_hash in the database
   public DateTime CreatedAt { get; set; } = DateTime.UtcNow;  // Maps to created_at in the database
 
-  public ICollection<Video>? Videos { get; set; }
+  public ICollection<Entities.Video>? Videos { get; set; }
 }
-

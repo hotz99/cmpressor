@@ -2,21 +2,25 @@ syntax = "proto3";
 
 package compression;
 
-message CompressRequest {
-  // video binary data
-  string video_data = 1;
-  // 2 choices for codec
-  string codec = 2;
+option csharp_namespace = "Compression";
+
+enum Codec {
+  H264 = 0;
+  H265 = 1;
 }
 
-message CompressResponse {
+message Request {
+  // input binary data
+  bytes video_data = 1;
+  Codec codec = 2;
+}
+
+message Response {
   bool success = 1;
   // optional error/status message
-  string message = 2;
-  // compressed video binary data
-  bytes compressed_video = 3;
+  optional string message = 2;
+  // output binary data, null when compression fails
+  optional bytes compressed_video = 3;
 }
 
-service CompressionService {
-  rpc Compress(CompressRequest) returns (CompressResponse);
-}
+service Service { rpc Compress(Request) returns (Response); }
