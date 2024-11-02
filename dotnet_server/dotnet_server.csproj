@@ -19,7 +19,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
     <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
-    <Protobuf Include="../proto/compression.proto" GrpcServices="Client" />
+    <Protobuf Include="../proto/compression.proto" GrpcServices="none" />
   </ItemGroup>
 
 </Project>

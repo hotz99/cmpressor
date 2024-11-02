@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-package compression;
-
-option csharp_namespace = "Compression";
+option csharp_namespace = "RabbitmqRpc.CompressionProtobuf";
 
 enum Codec {
   H264 = 0;

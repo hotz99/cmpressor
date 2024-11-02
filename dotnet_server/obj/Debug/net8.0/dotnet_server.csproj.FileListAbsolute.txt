@@ -5,6 +5,12 @@
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/dotnet_server.runtimeconfig.json
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/dotnet_server.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/dotnet_server.pdb
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Google.Protobuf.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Core.Api.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Net.Client.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Net.Common.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.AspNetCore.Server.Kestrel.Https.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
@@ -28,6 +34,7 @@
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/NSwag.Core.Yaml.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/NSwag.Generation.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/NSwag.Generation.AspNetCore.dll
+/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/RabbitMQ.Client.dll
 /home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/YamlDotNet.dll
 /home/pedro/projects/cmpressor/dotnet_server/obj/Debug/net8.0/dotnet_server.csproj.AssemblyReference.cache
 /home/pedro/projects/cmpressor/dotnet_server/obj/Debug/net8.0/dotnet_server.GeneratedMSBuildEditorConfig.editorconfig
@@ -51,10 +58,3 @@
 /home/pedro/projects/cmpressor/dotnet_server/obj/Debug/net8.0/dotnet_server.pdb
 /home/pedro/projects/cmpressor/dotnet_server/obj/Debug/net8.0/dotnet_server.genruntimeconfig.cache
 /home/pedro/projects/cmpressor/dotnet_server/obj/Debug/net8.0/ref/dotnet_server.dll
-/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.AspNetCore.Server.Kestrel.Https.dll
-/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.dll
-/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Google.Protobuf.dll
-/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Core.Api.dll
-/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Net.Client.dll
-/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/Grpc.Net.Common.dll
-/home/pedro/projects/cmpressor/dotnet_server/bin/Debug/net8.0/RabbitMQ.Client.dll

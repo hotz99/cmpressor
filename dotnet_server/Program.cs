@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +31,6 @@ builder.Services.AddSingleton<Handlers>();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-app.MapPost("/upload", async (IFormFile file, Handlers handlers) => await handlers.HandleCompressionRequest(file));
+app.MapPost("/upload", async (IFormFile file, Handlers handlers) => await handlers.HandleCompressionRequest(file)).DisableAntiforgery();
 
 app.Run();
