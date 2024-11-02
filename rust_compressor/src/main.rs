@@ -1,6 +1,10 @@
 mod compression;
 mod rabbitmq_rpc_consumer;
 
+pub mod compression_protobuf {
+    include!(concat!(env!("OUT_DIR"), "/compression.protobuf.rs"));
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let rabbitmq_connection = lapin::Connection::connect(

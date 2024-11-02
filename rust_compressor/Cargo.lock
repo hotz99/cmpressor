@@ -1687,6 +1687,7 @@ dependencies = [
  "futures-util",
  "lapin",
  "prost",
+ "prost-build",
  "tokio",
  "tonic",
  "tonic-build",

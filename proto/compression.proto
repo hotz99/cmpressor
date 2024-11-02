@@ -1,24 +1,27 @@
 syntax = "proto3";
 
-option csharp_namespace = "RabbitmqRpc.CompressionProtobuf";
+package compression.protobuf;
+
+option csharp_namespace = "Compression.Protobuf";
 
 enum Codec {
   H264 = 0;
   H265 = 1;
 }
 
-message Request {
+message CompressionRequest {
   // input binary data
-  bytes video_data = 1;
+  bytes video_bytes = 1;
   Codec codec = 2;
 }
 
-message Response {
+message CompressionResponse {
   bool success = 1;
-  // optional error/status message
-  optional string message = 2;
+  optional string error = 2;
   // output binary data, null when compression fails
-  optional bytes compressed_video = 3;
+  optional bytes compressed_video_bytes = 3;
 }
 
-service Service { rpc Compress(Request) returns (Response); }
+service CompressionService {
+  rpc Compress(CompressionRequest) returns (CompressionResponse);
+}
