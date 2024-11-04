@@ -95,7 +95,7 @@ async fn handle_compression_request(
     // TODO make deserialization of codec and format more robust
     let output_format = match request.format {
         0 => "mp4",
-        1 => "mkv",
+        1 => "matroska",
         2 => "avi",
         3 => "flv",
         4 => "mov",

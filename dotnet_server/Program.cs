@@ -38,6 +38,9 @@ var app = builder.Build();
 // TODO bind to protobuf generated class instead ?
 app.MapPost("/upload", async (HttpRequest request, Handlers handlers) =>
 {
+  var tasks = new List<Task<CompressionResponse>>();
+
+  // Start a compression task for each file
   foreach (var file in request.Form.Files)
   {
     if (file.Length == 0)
@@ -51,19 +54,31 @@ app.MapPost("/upload", async (HttpRequest request, Handlers handlers) =>
     var videoBytes = ms.ToArray();
 
     var fileIndex = file.Name.Replace("file", "");
+    var format = request.Form[$"format{fileIndex}"];
+    var codec = request.Form[$"codec{fileIndex}"];
 
-    var formatFieldName = $"format{fileIndex}";
-    var format = request.Form[formatFieldName];
-
-    var codecFieldName = $"codec{fileIndex}";
-    var codec = request.Form[codecFieldName];
-
-    await handlers.HandleCompressionRequest(new CompressionRequest
+    // Create a compression task for each file and add it to the list
+    var compressionTask = handlers.HandleCompressionRequest(new CompressionRequest
     {
       VideoBytes = Google.Protobuf.ByteString.CopyFrom(videoBytes),
       Format = Enum.Parse<Format>(format, true),
       Codec = Enum.Parse<Codec>(codec, true)
     });
+
+    tasks.Add(compressionTask);
+  }
+
+  // Process tasks as they complete
+  while (tasks.Count > 0)
+  {
+    // Wait for any task to complete
+    var completedTask = await Task.WhenAny(tasks);
+    tasks.Remove(completedTask);
+
+    // Retrieve and respond with the result
+    var result = await completedTask;
+    await response.WriteAsync($"File processed with result: {result}\n");
+    await response.Body.FlushAsync(); // Immediately send each result
   }
 }).DisableAntiforgery();
 
