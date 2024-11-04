@@ -55,7 +55,7 @@ public class RpcProducer : IDisposable
     _channel.Dispose();
   }
 
-  public Task<CompressionResponse> CompressionCallAsync(IFormFile file, CancellationToken cancellationToken = default)
+  public Task<CompressionResponse> CompressionCallAsync(Compression.Protobuf.CompressionRequest req, CancellationToken cancellationToken = default)
   {
     var correlationId = Guid.NewGuid().ToString();
     var tcs = new TaskCompletionSource<CompressionResponse>();
@@ -72,15 +72,9 @@ public class RpcProducer : IDisposable
     }
 
     // TODO try directly casting file as byte array
-    using var fileStream = file.OpenReadStream();
-    byte[] videoBytes = new byte[file.Length];
-    fileStream.Read(videoBytes, 0, (int)file.Length);
-
-    var compressionRequest = new CompressionRequest
-    {
-      VideoBytes = ByteString.CopyFrom(videoBytes),
-      Codec = Codec.H264,
-    };
+    /*using var fileStream = file.OpenReadStream();*/
+    /*byte[] videoBytes = new byte[file.Length];*/
+    /*fileStream.Read(videoBytes, 0, (int)file.Length);*/
 
     IBasicProperties props = _channel.CreateBasicProperties();
     props.CorrelationId = correlationId;
@@ -89,7 +83,7 @@ public class RpcProducer : IDisposable
     _channel.BasicPublish(exchange: string.Empty,
                          routingKey: QUEUE_NAME,
                          basicProperties: props,
-                         body: compressionRequest.ToByteArray());
+                         body: req.ToByteArray());
 
     Console.WriteLine("sent compression request to rabbitmq");
 

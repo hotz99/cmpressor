@@ -9,10 +9,19 @@ enum Codec {
   H265 = 1;
 }
 
+enum Format {
+  MP4 = 0;
+  MKV = 1;
+  AVI = 3;
+  FLV = 4;
+  MOV = 5;
+}
+
 message CompressionRequest {
   // input binary data
   bytes video_bytes = 1;
-  Codec codec = 2;
+  Format format = 2;
+  Codec codec = 3;
 }
 
 message CompressionResponse {

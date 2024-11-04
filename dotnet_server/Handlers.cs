@@ -1,4 +1,5 @@
 using RabbitmqRpc;
+using Compression.Protobuf;
 
 public class Handlers
 {
@@ -9,19 +10,17 @@ public class Handlers
     _rpcProducer = rpcProducer;
   }
 
-  public async Task<IResult> HandleCompressionRequest(IFormFile file)
+  public async Task<IResult> HandleCompressionRequest(CompressionRequest req)
   {
-    Console.WriteLine("compression request received");
-
     // TODO middleware to reject invalid/empty files
-    if (file == null || file.Length == 0)
+    if (req.VideoBytes.Length == 0)
     {
-      return Results.BadRequest("no file was uploaded or file is empty");
+      return Results.BadRequest("no file was uploaded");
     }
 
-    Console.WriteLine($"received file size (bytes): {file.Length}");
+    Console.WriteLine($"received file size (bytes): {req.VideoBytes.Length}");
 
-    var compressionResponse = await _rpcProducer.CompressionCallAsync(file);
+    var compressionResponse = await _rpcProducer.CompressionCallAsync(req);
 
     Console.WriteLine($"compressed video size (bytes): {compressionResponse.CompressedVideoBytes.Length}");
 

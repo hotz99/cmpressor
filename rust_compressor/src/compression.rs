@@ -4,24 +4,22 @@ use std::process::{Command, Stdio};
 pub fn compress_video(
     video_data: &[u8],
     video_id: &str,
-    format: &str,
+    output_format: &str,
     codec: &str,
 ) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
     // mp4 requires seekable output, which stdout is not
     // hence we write to a tmpfs (in-memory filesystem) file
-    let output_file_path = format!("/tmp/{}.{}", video_id, format);
+    let output_file_path = format!("/tmp/{}.{}", video_id, output_format);
 
     let mut ffmpeg = Command::new("ffmpeg")
         .arg("-loglevel")
         .arg("error")
-        .arg("-f")
-        .arg(format)
         .arg("-i")
         .arg("-")
         .arg("-c:v")
         .arg(codec)
         .arg("-f")
-        .arg(format)
+        .arg(output_format)
         .arg(output_file_path.as_str())
         .stdin(Stdio::piped())
         .spawn()?;
@@ -46,15 +44,15 @@ mod tests {
         let video_data = include_bytes!("../assets/sample.mp4");
         let id = "id_1";
         let codec = "libx264";
-        let format = "mp4";
-        let compressed_video = compress_video(video_data, id, format, codec).unwrap();
+        let output_format = "mp4";
+        let compressed_video = compress_video(video_data, id, output_format, codec).unwrap();
 
         println!("input len: {}", video_data.len());
         println!("compressed len: {}", compressed_video.len());
 
         let output_path = format!(
             "/home/pedro/projects/cmpressor/rust_compressor/assets/sample_compressed.{}",
-            format
+            output_format
         );
         println!("output path: {}", output_path);
         let mut output_file =

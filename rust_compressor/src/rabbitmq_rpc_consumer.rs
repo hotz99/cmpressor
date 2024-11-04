@@ -92,7 +92,16 @@ async fn handle_compression_request(
     request: compression_protobuf::CompressionRequest,
     correlation_id: &str,
 ) -> Result<compression_protobuf::CompressionResponse, Box<dyn std::error::Error>> {
-    let format = "mp4";
+    // TODO make deserialization of codec and format more robust
+    let output_format = match request.format {
+        0 => "mp4",
+        1 => "mkv",
+        2 => "avi",
+        3 => "flv",
+        4 => "mov",
+        _ => return Err("invalid output format".into()),
+    };
+
     let codec = match request.codec {
         0 => "libx264",
         1 => "libx265",
@@ -105,7 +114,7 @@ async fn handle_compression_request(
 
     let start = std::time::Instant::now();
 
-    match compression::compress_video(&request.video_bytes, correlation_id, format, codec) {
+    match compression::compress_video(&request.video_bytes, correlation_id, output_format, codec) {
         Ok(bytes) => {
             println!("compression took: {:?}", start.elapsed());
             println!("input data size: {}", request.video_bytes.len());
@@ -113,7 +122,7 @@ async fn handle_compression_request(
 
             let compression_response = compression_protobuf::CompressionResponse {
                 success: true,
-                message: None,
+                error: None,
                 compressed_video_bytes: Some(bytes),
             };
 

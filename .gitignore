@@ -1,4 +1,5 @@
 rust_compressor/target
+.netcoredbg_hist
 
 *.swp
 *.*~

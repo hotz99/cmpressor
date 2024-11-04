@@ -9,35 +9,41 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Compression.Protobuf {
-
+namespace Compression.Protobuf
+{
   /// <summary>Holder for reflection information generated from compression.proto</summary>
-  public static partial class CompressionReflection {
+  public static partial class CompressionReflection
+  {
 
     #region Descriptor
     /// <summary>File descriptor for compression.proto</summary>
-    public static pbr::FileDescriptor Descriptor {
+    public static pbr::FileDescriptor Descriptor
+    {
       get { return descriptor; }
     }
     private static pbr::FileDescriptor descriptor;
 
-    static CompressionReflection() {
+    static CompressionReflection()
+    {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChFjb21wcmVzc2lvbi5wcm90bxIUY29tcHJlc3Npb24ucHJvdG9idWYiVQoS",
-            "Q29tcHJlc3Npb25SZXF1ZXN0EhMKC3ZpZGVvX2J5dGVzGAEgASgMEioKBWNv",
-            "ZGVjGAIgASgOMhsuY29tcHJlc3Npb24ucHJvdG9idWYuQ29kZWMihAEKE0Nv",
-            "bXByZXNzaW9uUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBISCgVlcnJvchgC",
-            "IAEoCUgAiAEBEiMKFmNvbXByZXNzZWRfdmlkZW9fYnl0ZXMYAyABKAxIAYgB",
-            "AUIICgZfZXJyb3JCGQoXX2NvbXByZXNzZWRfdmlkZW9fYnl0ZXMqGwoFQ29k",
-            "ZWMSCAoESDI2NBAAEggKBEgyNjUQATJ1ChJDb21wcmVzc2lvblNlcnZpY2US",
-            "XwoIQ29tcHJlc3MSKC5jb21wcmVzc2lvbi5wcm90b2J1Zi5Db21wcmVzc2lv",
-            "blJlcXVlc3QaKS5jb21wcmVzc2lvbi5wcm90b2J1Zi5Db21wcmVzc2lvblJl",
-            "c3BvbnNlQheqAhRDb21wcmVzc2lvbi5Qcm90b2J1ZmIGcHJvdG8z"));
+            "ChFjb21wcmVzc2lvbi5wcm90bxIUY29tcHJlc3Npb24ucHJvdG9idWYigwEK",
+            "EkNvbXByZXNzaW9uUmVxdWVzdBITCgt2aWRlb19ieXRlcxgBIAEoDBIsCgZm",
+            "b3JtYXQYAiABKA4yHC5jb21wcmVzc2lvbi5wcm90b2J1Zi5Gb3JtYXQSKgoF",
+            "Y29kZWMYAyABKA4yGy5jb21wcmVzc2lvbi5wcm90b2J1Zi5Db2RlYyKEAQoT",
+            "Q29tcHJlc3Npb25SZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEhIKBWVycm9y",
+            "GAIgASgJSACIAQESIwoWY29tcHJlc3NlZF92aWRlb19ieXRlcxgDIAEoDEgB",
+            "iAEBQggKBl9lcnJvckIZChdfY29tcHJlc3NlZF92aWRlb19ieXRlcyobCgVD",
+            "b2RlYxIICgRIMjY0EAASCAoESDI2NRABKjUKBkZvcm1hdBIHCgNNUDQQABIH",
+            "CgNNS1YQARIHCgNBVkkQAxIHCgNGTFYQBBIHCgNNT1YQBTJ1ChJDb21wcmVz",
+            "c2lvblNlcnZpY2USXwoIQ29tcHJlc3MSKC5jb21wcmVzc2lvbi5wcm90b2J1",
+            "Zi5Db21wcmVzc2lvblJlcXVlc3QaKS5jb21wcmVzc2lvbi5wcm90b2J1Zi5D",
+            "b21wcmVzc2lvblJlc3BvbnNlQheqAhRDb21wcmVzc2lvbi5Qcm90b2J1ZmIG",
+            "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Compression.Protobuf.Codec), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Compression.Protobuf.CompressionRequest), global::Compression.Protobuf.CompressionRequest.Parser, new[]{ "VideoBytes", "Codec" }, null, null, null, null),
+          new pbr::GeneratedClrTypeInfo(new[] { typeof(global::Compression.Protobuf.Codec), typeof(global::Compression.Protobuf.Format), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Compression.Protobuf.CompressionRequest), global::Compression.Protobuf.CompressionRequest.Parser, new[]{ "VideoBytes", "Format", "Codec" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Compression.Protobuf.CompressionResponse), global::Compression.Protobuf.CompressionResponse.Parser, new[]{ "Success", "Error", "CompressedVideoBytes" }, new[]{ "Error", "CompressedVideoBytes" }, null, null, null)
           }));
     }
@@ -45,9 +51,19 @@ namespace Compression.Protobuf {
 
   }
   #region Enums
-  public enum Codec {
+  public enum Codec
+  {
     [pbr::OriginalName("H264")] H264 = 0,
     [pbr::OriginalName("H265")] H265 = 1,
+  }
+
+  public enum Format
+  {
+    [pbr::OriginalName("MP4")] Mp4 = 0,
+    [pbr::OriginalName("MKV")] Mkv = 1,
+    [pbr::OriginalName("AVI")] Avi = 3,
+    [pbr::OriginalName("FLV")] Flv = 4,
+    [pbr::OriginalName("MOV")] Mov = 5,
   }
 
   #endregion
@@ -55,9 +71,9 @@ namespace Compression.Protobuf {
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class CompressionRequest : pb::IMessage<CompressionRequest>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
-  #endif
+#endif
   {
     private static readonly pb::MessageParser<CompressionRequest> _parser = new pb::MessageParser<CompressionRequest>(() => new CompressionRequest());
     private pb::UnknownFieldSet _unknownFields;
@@ -67,19 +83,22 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
+    public static pbr::MessageDescriptor Descriptor
+    {
       get { return global::Compression.Protobuf.CompressionReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
+    pbr::MessageDescriptor pb::IMessage.Descriptor
+    {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompressionRequest() {
+    public CompressionRequest()
+    {
       OnConstruction();
     }
 
@@ -87,15 +106,18 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompressionRequest(CompressionRequest other) : this() {
+    public CompressionRequest(CompressionRequest other) : this()
+    {
       videoBytes_ = other.videoBytes_;
+      format_ = other.format_;
       codec_ = other.codec_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompressionRequest Clone() {
+    public CompressionRequest Clone()
+    {
       return new CompressionRequest(this);
     }
 
@@ -107,52 +129,78 @@ namespace Compression.Protobuf {
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pb::ByteString VideoBytes {
+    public pb::ByteString VideoBytes
+    {
       get { return videoBytes_; }
-      set {
+      set
+      {
         videoBytes_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    /// <summary>Field number for the "format" field.</summary>
+    public const int FormatFieldNumber = 2;
+    private global::Compression.Protobuf.Format format_ = global::Compression.Protobuf.Format.Mp4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Compression.Protobuf.Format Format
+    {
+      get { return format_; }
+      set
+      {
+        format_ = value;
+      }
+    }
+
     /// <summary>Field number for the "codec" field.</summary>
-    public const int CodecFieldNumber = 2;
+    public const int CodecFieldNumber = 3;
     private global::Compression.Protobuf.Codec codec_ = global::Compression.Protobuf.Codec.H264;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Compression.Protobuf.Codec Codec {
+    public global::Compression.Protobuf.Codec Codec
+    {
       get { return codec_; }
-      set {
+      set
+      {
         codec_ = value;
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
+    public override bool Equals(object other)
+    {
       return Equals(other as CompressionRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(CompressionRequest other) {
-      if (ReferenceEquals(other, null)) {
+    public bool Equals(CompressionRequest other)
+    {
+      if (ReferenceEquals(other, null))
+      {
         return false;
       }
-      if (ReferenceEquals(other, this)) {
+      if (ReferenceEquals(other, this))
+      {
         return true;
       }
       if (VideoBytes != other.VideoBytes) return false;
+      if (Format != other.Format) return false;
       if (Codec != other.Codec) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
+    public override int GetHashCode()
+    {
       int hash = 1;
       if (VideoBytes.Length != 0) hash ^= VideoBytes.GetHashCode();
+      if (Format != global::Compression.Protobuf.Format.Mp4) hash ^= Format.GetHashCode();
       if (Codec != global::Compression.Protobuf.Codec.H264) hash ^= Codec.GetHashCode();
-      if (_unknownFields != null) {
+      if (_unknownFields != null)
+      {
         hash ^= _unknownFields.GetHashCode();
       }
       return hash;
@@ -160,59 +208,82 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
+    public override string ToString()
+    {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    public void WriteTo(pb::CodedOutputStream output)
+    {
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
-    #else
+#else
       if (VideoBytes.Length != 0) {
         output.WriteRawTag(10);
         output.WriteBytes(VideoBytes);
       }
-      if (Codec != global::Compression.Protobuf.Codec.H264) {
+      if (Format != global::Compression.Protobuf.Format.Mp4) {
         output.WriteRawTag(16);
+        output.WriteEnum((int) Format);
+      }
+      if (Codec != global::Compression.Protobuf.Codec.H264) {
+        output.WriteRawTag(24);
         output.WriteEnum((int) Codec);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
-    #endif
+#endif
     }
 
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (VideoBytes.Length != 0) {
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output)
+    {
+      if (VideoBytes.Length != 0)
+      {
         output.WriteRawTag(10);
         output.WriteBytes(VideoBytes);
       }
-      if (Codec != global::Compression.Protobuf.Codec.H264) {
+      if (Format != global::Compression.Protobuf.Format.Mp4)
+      {
         output.WriteRawTag(16);
-        output.WriteEnum((int) Codec);
+        output.WriteEnum((int)Format);
       }
-      if (_unknownFields != null) {
+      if (Codec != global::Compression.Protobuf.Codec.H264)
+      {
+        output.WriteRawTag(24);
+        output.WriteEnum((int)Codec);
+      }
+      if (_unknownFields != null)
+      {
         _unknownFields.WriteTo(ref output);
       }
     }
-    #endif
+#endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
+    public int CalculateSize()
+    {
       int size = 0;
-      if (VideoBytes.Length != 0) {
+      if (VideoBytes.Length != 0)
+      {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(VideoBytes);
       }
-      if (Codec != global::Compression.Protobuf.Codec.H264) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Codec);
+      if (Format != global::Compression.Protobuf.Format.Mp4)
+      {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)Format);
       }
-      if (_unknownFields != null) {
+      if (Codec != global::Compression.Protobuf.Codec.H264)
+      {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)Codec);
+      }
+      if (_unknownFields != null)
+      {
         size += _unknownFields.CalculateSize();
       }
       return size;
@@ -220,14 +291,22 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(CompressionRequest other) {
-      if (other == null) {
+    public void MergeFrom(CompressionRequest other)
+    {
+      if (other == null)
+      {
         return;
       }
-      if (other.VideoBytes.Length != 0) {
+      if (other.VideoBytes.Length != 0)
+      {
         VideoBytes = other.VideoBytes;
       }
-      if (other.Codec != global::Compression.Protobuf.Codec.H264) {
+      if (other.Format != global::Compression.Protobuf.Format.Mp4)
+      {
+        Format = other.Format;
+      }
+      if (other.Codec != global::Compression.Protobuf.Codec.H264)
+      {
         Codec = other.Codec;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -235,10 +314,11 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    public void MergeFrom(pb::CodedInputStream input)
+    {
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
-    #else
+#else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
       if ((tag & 7) == 4) {
@@ -254,48 +334,63 @@ namespace Compression.Protobuf {
             break;
           }
           case 16: {
+            Format = (global::Compression.Protobuf.Format) input.ReadEnum();
+            break;
+          }
+          case 24: {
             Codec = (global::Compression.Protobuf.Codec) input.ReadEnum();
             break;
           }
         }
       }
-    #endif
+#endif
     }
 
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input)
+    {
       uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+      while ((tag = input.ReadTag()) != 0)
+      {
+        if ((tag & 7) == 4)
+        {
+          // Abort on any end group tag.
+          return;
+        }
+        switch (tag)
+        {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            VideoBytes = input.ReadBytes();
-            break;
-          }
-          case 16: {
-            Codec = (global::Compression.Protobuf.Codec) input.ReadEnum();
-            break;
-          }
+          case 10:
+            {
+              VideoBytes = input.ReadBytes();
+              break;
+            }
+          case 16:
+            {
+              Format = (global::Compression.Protobuf.Format)input.ReadEnum();
+              break;
+            }
+          case 24:
+            {
+              Codec = (global::Compression.Protobuf.Codec)input.ReadEnum();
+              break;
+            }
         }
       }
     }
-    #endif
+#endif
 
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class CompressionResponse : pb::IMessage<CompressionResponse>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
-  #endif
+#endif
   {
     private static readonly pb::MessageParser<CompressionResponse> _parser = new pb::MessageParser<CompressionResponse>(() => new CompressionResponse());
     private pb::UnknownFieldSet _unknownFields;
@@ -305,19 +400,22 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
+    public static pbr::MessageDescriptor Descriptor
+    {
       get { return global::Compression.Protobuf.CompressionReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
+    pbr::MessageDescriptor pb::IMessage.Descriptor
+    {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompressionResponse() {
+    public CompressionResponse()
+    {
       OnConstruction();
     }
 
@@ -325,7 +423,8 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompressionResponse(CompressionResponse other) : this() {
+    public CompressionResponse(CompressionResponse other) : this()
+    {
       success_ = other.success_;
       error_ = other.error_;
       compressedVideoBytes_ = other.compressedVideoBytes_;
@@ -334,7 +433,8 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompressionResponse Clone() {
+    public CompressionResponse Clone()
+    {
       return new CompressionResponse(this);
     }
 
@@ -343,9 +443,11 @@ namespace Compression.Protobuf {
     private bool success_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Success {
+    public bool Success
+    {
       get { return success_; }
-      set {
+      set
+      {
         success_ = value;
       }
     }
@@ -357,22 +459,26 @@ namespace Compression.Protobuf {
     private string error_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Error {
+    public string Error
+    {
       get { return error_ ?? ErrorDefaultValue; }
-      set {
+      set
+      {
         error_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
     /// <summary>Gets whether the "error" field is set</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasError {
+    public bool HasError
+    {
       get { return error_ != null; }
     }
     /// <summary>Clears the value of the "error" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearError() {
+    public void ClearError()
+    {
       error_ = null;
     }
 
@@ -386,38 +492,46 @@ namespace Compression.Protobuf {
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pb::ByteString CompressedVideoBytes {
+    public pb::ByteString CompressedVideoBytes
+    {
       get { return compressedVideoBytes_ ?? CompressedVideoBytesDefaultValue; }
-      set {
+      set
+      {
         compressedVideoBytes_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
     /// <summary>Gets whether the "compressed_video_bytes" field is set</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasCompressedVideoBytes {
+    public bool HasCompressedVideoBytes
+    {
       get { return compressedVideoBytes_ != null; }
     }
     /// <summary>Clears the value of the "compressed_video_bytes" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearCompressedVideoBytes() {
+    public void ClearCompressedVideoBytes()
+    {
       compressedVideoBytes_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
+    public override bool Equals(object other)
+    {
       return Equals(other as CompressionResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(CompressionResponse other) {
-      if (ReferenceEquals(other, null)) {
+    public bool Equals(CompressionResponse other)
+    {
+      if (ReferenceEquals(other, null))
+      {
         return false;
       }
-      if (ReferenceEquals(other, this)) {
+      if (ReferenceEquals(other, this))
+      {
         return true;
       }
       if (Success != other.Success) return false;
@@ -428,12 +542,14 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
+    public override int GetHashCode()
+    {
       int hash = 1;
       if (Success != false) hash ^= Success.GetHashCode();
       if (HasError) hash ^= Error.GetHashCode();
       if (HasCompressedVideoBytes) hash ^= CompressedVideoBytes.GetHashCode();
-      if (_unknownFields != null) {
+      if (_unknownFields != null)
+      {
         hash ^= _unknownFields.GetHashCode();
       }
       return hash;
@@ -441,16 +557,18 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
+    public override string ToString()
+    {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    public void WriteTo(pb::CodedOutputStream output)
+    {
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
-    #else
+#else
       if (Success != false) {
         output.WriteRawTag(8);
         output.WriteBool(Success);
@@ -466,45 +584,55 @@ namespace Compression.Protobuf {
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
-    #endif
+#endif
     }
 
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Success != false) {
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output)
+    {
+      if (Success != false)
+      {
         output.WriteRawTag(8);
         output.WriteBool(Success);
       }
-      if (HasError) {
+      if (HasError)
+      {
         output.WriteRawTag(18);
         output.WriteString(Error);
       }
-      if (HasCompressedVideoBytes) {
+      if (HasCompressedVideoBytes)
+      {
         output.WriteRawTag(26);
         output.WriteBytes(CompressedVideoBytes);
       }
-      if (_unknownFields != null) {
+      if (_unknownFields != null)
+      {
         _unknownFields.WriteTo(ref output);
       }
     }
-    #endif
+#endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
+    public int CalculateSize()
+    {
       int size = 0;
-      if (Success != false) {
+      if (Success != false)
+      {
         size += 1 + 1;
       }
-      if (HasError) {
+      if (HasError)
+      {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Error);
       }
-      if (HasCompressedVideoBytes) {
+      if (HasCompressedVideoBytes)
+      {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(CompressedVideoBytes);
       }
-      if (_unknownFields != null) {
+      if (_unknownFields != null)
+      {
         size += _unknownFields.CalculateSize();
       }
       return size;
@@ -512,17 +640,22 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(CompressionResponse other) {
-      if (other == null) {
+    public void MergeFrom(CompressionResponse other)
+    {
+      if (other == null)
+      {
         return;
       }
-      if (other.Success != false) {
+      if (other.Success != false)
+      {
         Success = other.Success;
       }
-      if (other.HasError) {
+      if (other.HasError)
+      {
         Error = other.Error;
       }
-      if (other.HasCompressedVideoBytes) {
+      if (other.HasCompressedVideoBytes)
+      {
         CompressedVideoBytes = other.CompressedVideoBytes;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -530,10 +663,11 @@ namespace Compression.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    public void MergeFrom(pb::CodedInputStream input)
+    {
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
-    #else
+#else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
       if ((tag & 7) == 4) {
@@ -558,39 +692,46 @@ namespace Compression.Protobuf {
           }
         }
       }
-    #endif
+#endif
     }
 
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input)
+    {
       uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+      while ((tag = input.ReadTag()) != 0)
+      {
+        if ((tag & 7) == 4)
+        {
+          // Abort on any end group tag.
+          return;
+        }
+        switch (tag)
+        {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            Success = input.ReadBool();
-            break;
-          }
-          case 18: {
-            Error = input.ReadString();
-            break;
-          }
-          case 26: {
-            CompressedVideoBytes = input.ReadBytes();
-            break;
-          }
+          case 8:
+            {
+              Success = input.ReadBool();
+              break;
+            }
+          case 18:
+            {
+              Error = input.ReadString();
+              break;
+            }
+          case 26:
+            {
+              CompressedVideoBytes = input.ReadBytes();
+              break;
+            }
         }
       }
     }
-    #endif
+#endif
 
   }
 
