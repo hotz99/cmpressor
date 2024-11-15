@@ -11,6 +11,7 @@ using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
 namespace Compression.Protobuf
 {
+
   /// <summary>Holder for reflection information generated from compression.proto</summary>
   public static partial class CompressionReflection
   {
@@ -27,23 +28,23 @@ namespace Compression.Protobuf
     {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChFjb21wcmVzc2lvbi5wcm90bxIUY29tcHJlc3Npb24ucHJvdG9idWYigwEK",
-            "EkNvbXByZXNzaW9uUmVxdWVzdBITCgt2aWRlb19ieXRlcxgBIAEoDBIsCgZm",
-            "b3JtYXQYAiABKA4yHC5jb21wcmVzc2lvbi5wcm90b2J1Zi5Gb3JtYXQSKgoF",
-            "Y29kZWMYAyABKA4yGy5jb21wcmVzc2lvbi5wcm90b2J1Zi5Db2RlYyKEAQoT",
-            "Q29tcHJlc3Npb25SZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEhIKBWVycm9y",
-            "GAIgASgJSACIAQESIwoWY29tcHJlc3NlZF92aWRlb19ieXRlcxgDIAEoDEgB",
-            "iAEBQggKBl9lcnJvckIZChdfY29tcHJlc3NlZF92aWRlb19ieXRlcyobCgVD",
-            "b2RlYxIICgRIMjY0EAASCAoESDI2NRABKjUKBkZvcm1hdBIHCgNNUDQQABIH",
-            "CgNNS1YQARIHCgNBVkkQAxIHCgNGTFYQBBIHCgNNT1YQBTJ1ChJDb21wcmVz",
-            "c2lvblNlcnZpY2USXwoIQ29tcHJlc3MSKC5jb21wcmVzc2lvbi5wcm90b2J1",
-            "Zi5Db21wcmVzc2lvblJlcXVlc3QaKS5jb21wcmVzc2lvbi5wcm90b2J1Zi5D",
-            "b21wcmVzc2lvblJlc3BvbnNlQheqAhRDb21wcmVzc2lvbi5Qcm90b2J1ZmIG",
-            "cHJvdG8z"));
+            "ChFjb21wcmVzc2lvbi5wcm90bxIUY29tcHJlc3Npb24ucHJvdG9idWYiiQEK",
+            "EkNvbXByZXNzaW9uUmVxdWVzdBITCgt2aWRlb19ieXRlcxgBIAEoDBIyCgxv",
+            "dXRwdXRGb3JtYXQYAiABKA4yHC5jb21wcmVzc2lvbi5wcm90b2J1Zi5Gb3Jt",
+            "YXQSKgoFY29kZWMYBCABKA4yGy5jb21wcmVzc2lvbi5wcm90b2J1Zi5Db2Rl",
+            "YyKEAQoTQ29tcHJlc3Npb25SZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEhIK",
+            "BWVycm9yGAIgASgJSACIAQESIwoWY29tcHJlc3NlZF92aWRlb19ieXRlcxgD",
+            "IAEoDEgBiAEBQggKBl9lcnJvckIZChdfY29tcHJlc3NlZF92aWRlb19ieXRl",
+            "cyobCgVDb2RlYxIICgRIMjY0EAASCAoESDI2NRABKjUKBkZvcm1hdBIHCgNN",
+            "UDQQABIHCgNNS1YQARIHCgNBVkkQAxIHCgNGTFYQBBIHCgNNT1YQBTJ1ChJD",
+            "b21wcmVzc2lvblNlcnZpY2USXwoIQ29tcHJlc3MSKC5jb21wcmVzc2lvbi5w",
+            "cm90b2J1Zi5Db21wcmVzc2lvblJlcXVlc3QaKS5jb21wcmVzc2lvbi5wcm90",
+            "b2J1Zi5Db21wcmVzc2lvblJlc3BvbnNlQheqAhRDb21wcmVzc2lvbi5Qcm90",
+            "b2J1ZmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] { typeof(global::Compression.Protobuf.Codec), typeof(global::Compression.Protobuf.Format), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Compression.Protobuf.CompressionRequest), global::Compression.Protobuf.CompressionRequest.Parser, new[]{ "VideoBytes", "Format", "Codec" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Compression.Protobuf.CompressionRequest), global::Compression.Protobuf.CompressionRequest.Parser, new[]{ "VideoBytes", "OutputFormat", "Codec" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Compression.Protobuf.CompressionResponse), global::Compression.Protobuf.CompressionResponse.Parser, new[]{ "Success", "Error", "CompressedVideoBytes" }, new[]{ "Error", "CompressedVideoBytes" }, null, null, null)
           }));
     }
@@ -109,7 +110,7 @@ namespace Compression.Protobuf
     public CompressionRequest(CompressionRequest other) : this()
     {
       videoBytes_ = other.videoBytes_;
-      format_ = other.format_;
+      outputFormat_ = other.outputFormat_;
       codec_ = other.codec_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -138,22 +139,22 @@ namespace Compression.Protobuf
       }
     }
 
-    /// <summary>Field number for the "format" field.</summary>
-    public const int FormatFieldNumber = 2;
-    private global::Compression.Protobuf.Format format_ = global::Compression.Protobuf.Format.Mp4;
+    /// <summary>Field number for the "outputFormat" field.</summary>
+    public const int OutputFormatFieldNumber = 2;
+    private global::Compression.Protobuf.Format outputFormat_ = global::Compression.Protobuf.Format.Mp4;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Compression.Protobuf.Format Format
+    public global::Compression.Protobuf.Format OutputFormat
     {
-      get { return format_; }
+      get { return outputFormat_; }
       set
       {
-        format_ = value;
+        outputFormat_ = value;
       }
     }
 
     /// <summary>Field number for the "codec" field.</summary>
-    public const int CodecFieldNumber = 3;
+    public const int CodecFieldNumber = 4;
     private global::Compression.Protobuf.Codec codec_ = global::Compression.Protobuf.Codec.H264;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -186,7 +187,7 @@ namespace Compression.Protobuf
         return true;
       }
       if (VideoBytes != other.VideoBytes) return false;
-      if (Format != other.Format) return false;
+      if (OutputFormat != other.OutputFormat) return false;
       if (Codec != other.Codec) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -197,7 +198,7 @@ namespace Compression.Protobuf
     {
       int hash = 1;
       if (VideoBytes.Length != 0) hash ^= VideoBytes.GetHashCode();
-      if (Format != global::Compression.Protobuf.Format.Mp4) hash ^= Format.GetHashCode();
+      if (OutputFormat != global::Compression.Protobuf.Format.Mp4) hash ^= OutputFormat.GetHashCode();
       if (Codec != global::Compression.Protobuf.Codec.H264) hash ^= Codec.GetHashCode();
       if (_unknownFields != null)
       {
@@ -224,12 +225,12 @@ namespace Compression.Protobuf
         output.WriteRawTag(10);
         output.WriteBytes(VideoBytes);
       }
-      if (Format != global::Compression.Protobuf.Format.Mp4) {
+      if (OutputFormat != global::Compression.Protobuf.Format.Mp4) {
         output.WriteRawTag(16);
-        output.WriteEnum((int) Format);
+        output.WriteEnum((int) OutputFormat);
       }
       if (Codec != global::Compression.Protobuf.Codec.H264) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteEnum((int) Codec);
       }
       if (_unknownFields != null) {
@@ -248,14 +249,14 @@ namespace Compression.Protobuf
         output.WriteRawTag(10);
         output.WriteBytes(VideoBytes);
       }
-      if (Format != global::Compression.Protobuf.Format.Mp4)
+      if (OutputFormat != global::Compression.Protobuf.Format.Mp4)
       {
         output.WriteRawTag(16);
-        output.WriteEnum((int)Format);
+        output.WriteEnum((int)OutputFormat);
       }
       if (Codec != global::Compression.Protobuf.Codec.H264)
       {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteEnum((int)Codec);
       }
       if (_unknownFields != null)
@@ -274,9 +275,9 @@ namespace Compression.Protobuf
       {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(VideoBytes);
       }
-      if (Format != global::Compression.Protobuf.Format.Mp4)
+      if (OutputFormat != global::Compression.Protobuf.Format.Mp4)
       {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)Format);
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int)OutputFormat);
       }
       if (Codec != global::Compression.Protobuf.Codec.H264)
       {
@@ -301,9 +302,9 @@ namespace Compression.Protobuf
       {
         VideoBytes = other.VideoBytes;
       }
-      if (other.Format != global::Compression.Protobuf.Format.Mp4)
+      if (other.OutputFormat != global::Compression.Protobuf.Format.Mp4)
       {
-        Format = other.Format;
+        OutputFormat = other.OutputFormat;
       }
       if (other.Codec != global::Compression.Protobuf.Codec.H264)
       {
@@ -334,10 +335,10 @@ namespace Compression.Protobuf
             break;
           }
           case 16: {
-            Format = (global::Compression.Protobuf.Format) input.ReadEnum();
+            OutputFormat = (global::Compression.Protobuf.Format) input.ReadEnum();
             break;
           }
-          case 24: {
+          case 32: {
             Codec = (global::Compression.Protobuf.Codec) input.ReadEnum();
             break;
           }
@@ -371,10 +372,10 @@ namespace Compression.Protobuf
             }
           case 16:
             {
-              Format = (global::Compression.Protobuf.Format)input.ReadEnum();
+              OutputFormat = (global::Compression.Protobuf.Format)input.ReadEnum();
               break;
             }
-          case 24:
+          case 32:
             {
               Codec = (global::Compression.Protobuf.Codec)input.ReadEnum();
               break;

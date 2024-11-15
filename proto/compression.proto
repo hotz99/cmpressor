@@ -20,8 +20,8 @@ enum Format {
 message CompressionRequest {
   // input binary data
   bytes video_bytes = 1;
-  Format format = 2;
-  Codec codec = 3;
+  Format outputFormat = 2;
+  Codec codec = 4;
 }
 
 message CompressionResponse {

@@ -15,6 +15,7 @@ public class Handlers
     // TODO middleware to reject invalid/empty files
     if (req.VideoBytes.Length == 0)
     {
+      Console.WriteLine("no file was uploaded");
       return Results.BadRequest("no file was uploaded");
     }
 

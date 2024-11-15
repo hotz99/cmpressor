@@ -35,7 +35,9 @@ services:
       - backend_network
 
   dotnet_server:
-    build: .
+    build: 
+      context: ./dotnet_server
+      dockerfile: Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
@@ -48,6 +50,20 @@ services:
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
       - DB_NAME=${POSTGRES_DB}
+    networks:
+      - backend_network
+
+  sveltekit_server:
+    build: 
+      context: ./sveltekit_server
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - 5000:5000
+    environment:
+      PORT: 5000
     networks:
       - backend_network
 

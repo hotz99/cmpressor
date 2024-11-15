@@ -93,7 +93,7 @@ async fn handle_compression_request(
     correlation_id: &str,
 ) -> Result<compression_protobuf::CompressionResponse, Box<dyn std::error::Error>> {
     // TODO make deserialization of codec and format more robust
-    let output_format = match request.format {
+    let output_format = match request.output_format {
         0 => "mp4",
         1 => "matroska",
         2 => "avi",

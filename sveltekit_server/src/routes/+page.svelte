@@ -13,77 +13,83 @@
 
   const ASPNET_UPLOAD_ENDPOINT = "http://localhost:3000/upload";
 
-  let open = $state(false);
-  let value = $state("");
-  let triggerRef = $state<HTMLButtonElement>(null!);
+  type FileSource = { value: "device" | "cloud"; label: string };
+  const fileSources: FileSource[] = [ {value: "device", label: "From Device"}, {value: "cloud", label: "From Cloud"} ];
+  const formats = [ {value: "MP4", label: "MP4"}, {value: "MKV", label: "MKV"}, {value: "AVI", label: "AVI"}, {value: "MOV", label: "MOV"}, {value: "FLV", label: "FLV"} ];
+
+  let selectedFileSource = $state<FileSource | null>(null);
+
+  $effect(() => {
+    selectedFileSource;
+
+    if (selectedFileSource?.value === "device") {
+      console.log("device selected");
+      const fileInput = document.getElementById("filesInput") as HTMLInputElement;
+      fileInput.click();
+    } else if (selectedFileSource?.value === "cloud") {
+      console.log("cloud selected");
+    }
+  })
+
   let selectedFormat = $state("MP4");
   let selectedCodec = $state("H264");
 
-  const fileSources = [ {value: "device", label: "From Device"}, {value: "cloud", label: "From Cloud"} ];
-  const formats = [ {value: "MP4", label: "MP4"}, {value: "MKV", label: "MKV"}, {value: "AVI", label: "AVI"}, {value: "MOV", label: "MOV"}, {value: "FLV", label: "FLV"} ];
-
-  let metadata: { format: string; codec: string }[] = $state([]);
-  let files: File[] = $state([]);
+  let files: { file: File, outputFormat: string}[] = $state([]);
 
   function handleFilesChange(event: Event) {
-    metadata = files.map(() => ({ format: selectedFormat, codec: selectedCodec}));
-    files = Array.from((event.target as HTMLInputElement).files || []);
+    const filesWithOutputFormats = Array.from((event.target as HTMLInputElement).files || []).map((file) => ({ file, outputFormat: selectedFormat }));
+    files = Array.from(filesWithOutputFormats || []);
   }
 
-  async function handleSubmit() {
+  async function handleRequest(file: File, outputFormat: string) {
     const formData = new FormData();
-    files.forEach((file, index) => {
-      formData.append(`file${index + 1}`, file);
-      formData.append(`format${index + 1}`, metadata[index].format);
-      formData.append(`codec${index + 1}`, metadata[index].codec);
-    });
+    formData.append("videoFile", file);
+    formData.append("outputFormat", outputFormat);
+    formData.append("codec", selectedCodec);
 
-    await fetch(ASPNET_UPLOAD_ENDPOINT, {
+    return fetch(ASPNET_UPLOAD_ENDPOINT, {
       method: "POST",
       body: formData,
-    });
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`failed to process file: ${file.name}`);
+      }
+      console.log(`file processed successfully: ${file.name}`);
+      return response;
+    }).catch(error => console.error(error));
   }
 
-  const selectedValue = $derived(
-    fileSources.find((f) => f.value === value)?.label
-  );
- 
-  // refocus trigger button when user selects
-  // item to allow keyboard navigation
-  function closeAndFocusTrigger() {
-    open = false;
-    tick().then(() => {
-      triggerRef.focus();
-    });
-  
-    if (value === "device") {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.multiple = true;
-      input.click();
-      input.onchange = (event) => {
-        files = Array.from((event.target as HTMLInputElement).files || []);
-      };
-    }
+async function handleSubmit() {
+  const uploadPromises = files.map(({ file, outputFormat }) => handleRequest(file, outputFormat));
+
+  try {
+    await Promise.all(uploadPromises);
+    console.log("all files processed successfully");
+  } catch (error) {
+    console.error("one or more files failed to process:", error);
   }
+}
 </script>
 
-<div class="flex items-center justify-center h-full w-full p-24">
-    {#if files.length > 0}
-  <Input type="file" id="file-input" multiple class="invisible" on:change={(e) => handleFilesChange(e)} />
-  <Button variant="primary" on:click={() => document.getElementById("file-input")!.click()}>
-    Add More Files
-  </Button>
-      <div class="file-list">
-    {#each files as file, index}
-      <div class="file-item">
-        <div class="file-info">
-          <div>{file.name}</div>
-          <div>{(file.size / (1024 * 1024)).toFixed(2)} MB</div>
-        </div>
-        <div class="file-controls">
-          <div>
-            <Select.Root type="single">
+<div class="flex justify-center mt-24">
+  <Input class="hidden" id="filesInput" type="file" accept="video/mp4, video/mvk, video/avi" multiple  onchange={(e) => handleFilesChange(e)} />
+  {#if files.length > 0}
+    <div class="flex flex-col space-y-4">
+    <div class="border rounded border-primary">
+      <Button onclick={() => document.getElementById("file-input")!.click()}>
+        Add More Files
+      </Button>
+      <div class="flex flex-col space-y-2">
+        {#each files as file, index}
+          <div class="flex flex-row space-x-2">
+            <div class="file-info">
+              <div>{file.file.name}</div>
+              <div>{(file.file.size / (1024 * 1024)).toFixed(2)} MB</div>
+            </div>
+            <Select.Root type="single" bind:value={file.outputFormat}>
+              <Select.Trigger>
+                  {file.outputFormat}
+              </Select.Trigger>
               <Select.Content>
                 <Select.Group>
                   {#each formats as format}
@@ -94,78 +100,52 @@
                 </Select.Group>
               </Select.Content>
             </Select.Root>
+            <Button variant="outline" size="icon" title="Settings" onclick={() => console.log("settings")}>
+              <IconSettings />
+            </Button>
+            <Button variant="outline" size="icon" title="Remove File" onclick={() => files = files.filter((_, i) => i !== index)}>
+              <CircleX/>
+            </Button>
           </div>
-          <Button variant="outline" size="icon" title="Settings" on:click={() => console.log("foo")}>
-            <IconSettings />
-          </Button>
-          <Button variant="outline" size="icon" title="Remove File" on:click={() => { 
-              files = files.filter((_, i) => i !== index);
-              console.log(files); 
-              }}>
-            <CircleX/>
-          </Button>
-        </div>
+        {/each}
       </div>
-    {/each}
-  </div>
-
-  <div class="batch-options">
-    <span>Convert All ({files.length}) to:</span>
-    <Select.Root
-          type="single"
-          bind:value={selectedFormat}
-        >
+    </div>
+    <div class="flex flex-row space-x-2">
+      <span>Convert All ({files.length}) to:</span>
+      <Select.Root
+            type="single"
+            bind:value={selectedFormat}
+          >
+        <Select.Trigger>
+          <span>{selectedFormat}</span>
+        </Select.Trigger>
+        <Select.Content>
+            {#each formats as format}
+              <Select.Item value={format.value} label={format.label}
+                >{format.label}</Select.Item
+              >
+            {/each}
+        </Select.Content>
+      </Select.Root>
+      <Button onclick={handleSubmit}>Compress Now</Button>
+    </div>
+    </div>
+  {:else}
+    <Select.Root type="single" onValueChange={(v) => selectedFileSource = fileSources.find((s) => s.value === v) || null}>
+      <Select.Trigger>
+        {selectedFileSource ? selectedFileSource.label : "Choose Files"}
+      </Select.Trigger>
       <Select.Content>
-          {#each formats as format}
-            <Select.Item value={format.value} label={format.label}
-              >{format.label}</Select.Item
+        <Select.Group>
+          {#each fileSources as fileSource}
+            <Select.Item
+              value={fileSource.value}
             >
+              {fileSource.label}
+            </Select.Item>
           {/each}
+        </Select.Group>
       </Select.Content>
     </Select.Root>
-    <Button on:click={handleSubmit}>Compress Now</Button>
-  </div>
-  {:else}
-    <Popover.Root bind:open>
-    <Popover.Trigger bind:ref={triggerRef}>
-      {#snippet child({ props })}
-        <Button
-          variant="outline"
-          class="w-[200px] justify-between"
-          {...props}
-          role="combobox"
-          aria-expanded={open}
-        >
-          {selectedValue || "Choose Files"}
-          <ChevronDown class="ml-2 size-4 shrink-0 opacity-50" />
-        </Button>
-      {/snippet}
-    </Popover.Trigger>
-    <Popover.Content class="w-[200px] p-0">
-      <Command.Root>
-        <Command.List>
-          <Command.Group>
-            {#each fileSources as fileSource}
-              <Command.Item
-                value={fileSource.value}
-                onSelect={() => {
-                  value = fileSource.value;
-                  closeAndFocusTrigger();
-                }}
-              >
-                <Check
-                  class={cn(
-                    "mr-2 size-4",
-                    value !== fileSource.value && "text-transparent"
-                  )}
-                />
-                {fileSource.label}
-              </Command.Item>
-            {/each}
-          </Command.Group>
-        </Command.List>
-      </Command.Root>
-    </Popover.Content>
-  </Popover.Root>
   {/if}
 </div>

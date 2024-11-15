@@ -35,6 +35,8 @@ declare module '$env/static/private' {
 	export const HYPRLAND_CMD: string;
 	export const npm_config_cache: string;
 	export const LESS: string;
+	export const CONDA_EXE: string;
+	export const _CE_M: string;
 	export const NVIM: string;
 	export const XDG_BACKEND: string;
 	export const NODE: string;
@@ -86,13 +88,15 @@ declare module '$env/static/private' {
 	export const ZSH: string;
 	export const LESS_TERMCAP_me: string;
 	export const LESS_TERMCAP_md: string;
+	export const _CE_CONDA: string;
 	export const npm_config_prefix: string;
 	export const USER: string;
+	export const CONDA_SHLVL: string;
 	export const HYPRLAND_INSTANCE_SIGNATURE: string;
 	export const DISPLAY: string;
 	export const npm_lifecycle_event: string;
-	export const LESS_TERMCAP_ue: string;
 	export const SHLVL: string;
+	export const LESS_TERMCAP_ue: string;
 	export const MOZ_ENABLE_WAYLAND: string;
 	export const LESS_TERMCAP_us: string;
 	export const PAGER: string;
@@ -102,6 +106,7 @@ declare module '$env/static/private' {
 	export const XDG_SESSION_ID: string;
 	export const npm_config_user_agent: string;
 	export const npm_execpath: string;
+	export const CONDA_PYTHON_EXE: string;
 	export const XDG_RUNTIME_DIR: string;
 	export const MYVIMRC: string;
 	export const DEBUGINFOD_URLS: string;
@@ -162,6 +167,8 @@ declare module '$env/dynamic/private' {
 		HYPRLAND_CMD: string;
 		npm_config_cache: string;
 		LESS: string;
+		CONDA_EXE: string;
+		_CE_M: string;
 		NVIM: string;
 		XDG_BACKEND: string;
 		NODE: string;
@@ -213,13 +220,15 @@ declare module '$env/dynamic/private' {
 		ZSH: string;
 		LESS_TERMCAP_me: string;
 		LESS_TERMCAP_md: string;
+		_CE_CONDA: string;
 		npm_config_prefix: string;
 		USER: string;
+		CONDA_SHLVL: string;
 		HYPRLAND_INSTANCE_SIGNATURE: string;
 		DISPLAY: string;
 		npm_lifecycle_event: string;
-		LESS_TERMCAP_ue: string;
 		SHLVL: string;
+		LESS_TERMCAP_ue: string;
 		MOZ_ENABLE_WAYLAND: string;
 		LESS_TERMCAP_us: string;
 		PAGER: string;
@@ -229,6 +238,7 @@ declare module '$env/dynamic/private' {
 		XDG_SESSION_ID: string;
 		npm_config_user_agent: string;
 		npm_execpath: string;
+		CONDA_PYTHON_EXE: string;
 		XDG_RUNTIME_DIR: string;
 		MYVIMRC: string;
 		DEBUGINFOD_URLS: string;

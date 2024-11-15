@@ -3,12 +3,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source
 
 # copy csproj and restore as distinct layers
-COPY *.sln .
-COPY dotnet_server/*.csproj ./dotnet_server/
+COPY ./*.csproj ./dotnet_server/
 RUN dotnet restore
 
 # copy everything else and build app
-COPY dotnet_server/. ./dotnet_server/
+COPY ./. ./dotnet_server/
 WORKDIR /source/dotnet_server/
 RUN dotnet publish -c release -o /app --no-restore
 

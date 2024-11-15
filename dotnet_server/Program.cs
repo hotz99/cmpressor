@@ -1,7 +1,21 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Compression.Protobuf;
 
+const string WEB_CLIENT_URL = "http://localhost:5173";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy("AllowSpecificOrigin",
+      policy =>
+      {
+        policy.WithOrigins(WEB_CLIENT_URL)
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+      });
+});
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -32,53 +46,31 @@ builder.Services.AddSingleton<Handlers>();
 
 var app = builder.Build();
 
+app.UseCors("AllowSpecificOrigin");
+
 /*app.MapPost("/upload", async (IFormFile file, Handlers handlers) => await handlers.HandleCompressionRequest(file)).DisableAntiforgery();*/
 
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/parameter-binding?view=aspnetcore-8.0
+// https://andrewlock.net/reading-json-and-binary-data-from-multipart-form-data-sections-in-aspnetcore/
 // TODO bind to protobuf generated class instead ?
-app.MapPost("/upload", async (HttpRequest request, Handlers handlers) =>
+app.MapPost("/upload", async (IFormFile videoFile,
+    [FromForm] string outputFormat, [FromForm] string codec, Handlers handlers) =>
 {
-  var tasks = new List<Task<CompressionResponse>>();
+  Console.WriteLine($"outputFormat: {outputFormat}");
+  Console.WriteLine($"codec: {codec}");
 
-  // Start a compression task for each file
-  foreach (var file in request.Form.Files)
+  using (MemoryStream ms = new MemoryStream())
   {
-    if (file.Length == 0)
-    {
-      Console.WriteLine("no file was uploaded");
-      continue;
-    }
+    videoFile.CopyTo(ms);
 
-    using var ms = new MemoryStream();
-    await file.CopyToAsync(ms);
-    var videoBytes = ms.ToArray();
-
-    var fileIndex = file.Name.Replace("file", "");
-    var format = request.Form[$"format{fileIndex}"];
-    var codec = request.Form[$"codec{fileIndex}"];
-
-    // Create a compression task for each file and add it to the list
     var compressionTask = handlers.HandleCompressionRequest(new CompressionRequest
     {
-      VideoBytes = Google.Protobuf.ByteString.CopyFrom(videoBytes),
-      Format = Enum.Parse<Format>(format, true),
+      VideoBytes = Google.Protobuf.ByteString.CopyFrom(ms.ToArray()),
+      OutputFormat = Enum.Parse<Format>(outputFormat, true),
       Codec = Enum.Parse<Codec>(codec, true)
     });
 
-    tasks.Add(compressionTask);
-  }
-
-  // Process tasks as they complete
-  while (tasks.Count > 0)
-  {
-    // Wait for any task to complete
-    var completedTask = await Task.WhenAny(tasks);
-    tasks.Remove(completedTask);
-
-    // Retrieve and respond with the result
-    var result = await completedTask;
-    await response.WriteAsync($"File processed with result: {result}\n");
-    await response.Body.FlushAsync(); // Immediately send each result
+    return await compressionTask;
   }
 }).DisableAntiforgery();
 
