@@ -4,6 +4,7 @@
   import Check from "lucide-svelte/icons/check";
   import ChevronDown from "lucide-svelte/icons/chevron-down";
   import IconSettings from "lucide-svelte/icons/settings";
+  import LoaderCircle from "lucide-svelte/icons/loader-circle";
   import CircleX from "lucide-svelte/icons/circle-x";
   import { tick } from "svelte";
   import * as Command from "$lib/components/ui/command";
@@ -34,7 +35,7 @@
   let selectedFormat = $state("MP4");
   let selectedCodec = $state("H264");
 
-  let files: { file: File, outputFormat: string}[] = $state([]);
+  let files: { file: File, outputFormat: string, processedVideo: number[] | null}[] = $state([]);
 
   function handleFilesChange(event: Event) {
     const filesWithOutputFormats = Array.from((event.target as HTMLInputElement).files || []).map((file) => ({ file, outputFormat: selectedFormat }));
@@ -55,12 +56,32 @@
         throw new Error(`failed to process file: ${file.name}`);
       }
       console.log(`file processed successfully: ${file.name}`);
+      console.log(response);
       return response;
     }).catch(error => console.error(error));
   }
 
+  let isProcessing = $state(false);
 async function handleSubmit() {
-  const uploadPromises = files.map(({ file, outputFormat }) => handleRequest(file, outputFormat));
+  isProcessing = true;
+
+  const uploadPromises = files.map(async ({ file, outputFormat }, index) => {
+    const response = await handleRequest(file, outputFormat);
+
+    if (response.ok) {
+      const processedVideo = await response.blob();
+      files[index].processedVideo = processedVideo;
+      // save processed video to disk
+      const url = URL.createObjectURL(processedVideo);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      a.click();
+
+    } else {
+      console.error("failed to process video", file.name);
+    }
+  });
 
   try {
     await Promise.all(uploadPromises);
@@ -68,6 +89,8 @@ async function handleSubmit() {
   } catch (error) {
     console.error("one or more files failed to process:", error);
   }
+
+  isProcessing = false;
 }
 </script>
 
@@ -127,7 +150,15 @@ async function handleSubmit() {
             {/each}
         </Select.Content>
       </Select.Root>
-      <Button onclick={handleSubmit}>Compress Now</Button>
+      <Button onclick={handleSubmit}>
+          {#if isProcessing}
+          <svg
+          class="animate-spin h-8 w-8 text-white"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <LoaderCircle />
+        </svg>{:else}Compress Now{/if}</Button>
     </div>
     </div>
   {:else}
