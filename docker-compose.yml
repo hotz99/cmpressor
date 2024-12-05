@@ -1,6 +1,21 @@
 services:
+  rabbitmq:
+    image: rabbitmq:4.0.3-alpine
+    environment:
+      # 100MB max frame size
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit max_message_size 104857600
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - backend_network
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "ping" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
   postgres:
-    image: postgres
+    image: postgres:17.1-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -10,6 +25,9 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./sql_scripts:/docker-entrypoint-initdb.d/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     networks:
       - backend_network
     healthcheck:

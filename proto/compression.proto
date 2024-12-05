@@ -12,9 +12,9 @@ enum Codec {
 enum Format {
   MP4 = 0;
   MKV = 1;
-  AVI = 3;
-  FLV = 4;
-  MOV = 5;
+  AVI = 2;
+  FLV = 3;
+  MOV = 4;
 }
 
 message CompressionRequest {

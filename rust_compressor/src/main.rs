@@ -1,4 +1,4 @@
-mod compression;
+pub mod compression;
 mod rabbitmq_rpc_consumer;
 
 pub mod compression_protobuf {

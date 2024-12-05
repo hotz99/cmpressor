@@ -15,19 +15,14 @@
     { value: "device", label: "From Device" },
     { value: "cloud", label: "From Cloud" },
   ];
-  const formats = [
-    { value: "MP4", label: "MP4" },
-    { value: "MKV", label: "MKV" },
-    { value: "AVI", label: "AVI" },
-    { value: "MOV", label: "MOV" },
-    { value: "FLV", label: "FLV" },
-  ];
+
+  const formats: string[] = ["MP4", "MKV", "AVI", "MOV", "FLV"];
 
   let selectedFileSource = $state<FileSource | null>(null);
+  let selectedFormat = $state("MP4");
+  let selectedCodec = $state("H264");
 
   $effect(() => {
-    selectedFileSource;
-
     if (selectedFileSource?.value === "device") {
       console.log("device selected");
       const fileInput = document.getElementById(
@@ -39,8 +34,22 @@
     }
   });
 
-  let selectedFormat = $state("MP4");
-  let selectedCodec = $state("H264");
+  // $effect(() => {
+  //   // avoids infinite $effect loop, somehow
+  //   // i ought to read the docs
+  //   if (
+  //     $inputFilesStore.every((file) => file.outputFormat === selectedFormat)
+  //   ) {
+  //     return;
+  //   }
+
+  //   $inputFilesStore = $inputFilesStore.map((file) => ({
+  //     ...file,
+  //     outputFormat: selectedFormat,
+  //   }));
+
+  //   console.log("$effect: output format changed to", selectedFormat);
+  // });
 
   function handleFilesChange(event: Event) {
     const newFiles = Array.from(
@@ -96,7 +105,7 @@
         if (response?.ok) {
           $inputFilesStore[index].compressedBinary = await response.blob();
         } else {
-          console.error("failed to process video", inputFile.name);
+          console.log("expected 200OK got ", response);
         }
       },
     );
@@ -124,60 +133,64 @@
   />
   {#if $inputFilesStore.length > 0}
     <div class="flex flex-col space-y-4 mx-auto">
-      <Button
-        class="w-1/3"
-        onclick={() => document.getElementById("filesInput")!.click()}
-      >
-        Add More Files
-      </Button>
+      <div class="flex flex-row justify-between">
+        <Button
+          class="w-1/4"
+          onclick={() => document.getElementById("filesInput")!.click()}
+        >
+          Add More Files
+        </Button>
+      </div>
       <div class="p-4 border-2 rounded border-primary">
         <div class="flex flex-col space-y-2">
           {#each $inputFilesStore as file, index}
-            <div class="flex flex-row space-x-16">
+            <div class="flex flex-row justify-between">
               <div class="file-info">
                 <div>{file.inputFile.name}</div>
                 <div>{(file.inputFile.size / (1024 * 1024)).toFixed(2)} MB</div>
               </div>
-              <span>Output:</span>
-              <Select.Root type="single" bind:value={file.outputFormat}>
-                <Select.Trigger>
-                  {file.outputFormat}
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Group>
-                    {#each formats as format}
-                      <Select.Item value={format.value} label={format.label}
-                        >{format.label}</Select.Item
-                      >
-                    {/each}
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
-              <Button
-                class="m-2"
-                size="icon"
-                title="Settings"
-                onclick={() => console.log("settings")}
-              >
-                <IconSettings />
-              </Button>
-              <Button
-                class="m-2"
-                size="icon"
-                title="Remove File"
-                onclick={() =>
-                  ($inputFilesStore = $inputFilesStore.filter(
-                    (_, i) => i !== index,
-                  ))}
-              >
-                <CircleX />
-              </Button>
+              <div class="flex flex-row space-x-4 items-center">
+                <span>Output:</span>
+                <Select.Root type="single" bind:value={file.outputFormat}>
+                  <Select.Trigger>
+                    {file.outputFormat}
+                  </Select.Trigger>
+                  <Select.Content>
+                    <Select.Group>
+                      {#each formats as format}
+                        <Select.Item value={format} label={format}
+                          >{format}</Select.Item
+                        >
+                      {/each}
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+                <Button
+                  class="w-12 h-12"
+                  title="Settings"
+                  onclick={() => console.log("settings")}
+                >
+                  <IconSettings />
+                </Button>
+                <Button
+                  class="w-12 h-12"
+                  title="Remove File"
+                  onclick={() =>
+                    ($inputFilesStore = $inputFilesStore.filter(
+                      (_, i) => i !== index,
+                    ))}
+                >
+                  <CircleX />
+                </Button>
+              </div>
             </div>
           {/each}
         </div>
       </div>
-      <div class="flex flex-row space-x-2">
-        {#if $inputFilesStore.length > 1}
+      <div class="flex flex-row space-x-2 items-center justify-between">
+        {#if $inputFilesStore.length == 1}
+          <span>Added 1 file</span>
+        {:else if $inputFilesStore.length > 1}
           <span>Convert All ({$inputFilesStore.length}) to:</span>
           <Select.Root type="single" bind:value={selectedFormat}>
             <Select.Trigger>
@@ -185,14 +198,12 @@
             </Select.Trigger>
             <Select.Content>
               {#each formats as format}
-                <Select.Item value={format.value} label={format.label}
-                  >{format.label}</Select.Item
+                <Select.Item value={format} label={format}>{format}</Select.Item
                 >
               {/each}
             </Select.Content>
           </Select.Root>
         {/if}
-
         <Button onclick={handleSubmit}>
           {#if isProcessing}
             <svg

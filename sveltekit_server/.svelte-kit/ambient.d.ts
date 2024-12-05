@@ -30,11 +30,13 @@ declare module '$env/static/private' {
 	export const npm_command: string;
 	export const LSCOLORS: string;
 	export const WINDOWID: string;
+	export const USER_ZDOTDIR: string;
 	export const npm_config_userconfig: string;
 	export const COLORTERM: string;
 	export const HYPRLAND_CMD: string;
 	export const npm_config_cache: string;
 	export const LESS: string;
+	export const TERM_PROGRAM_VERSION: string;
 	export const CONDA_EXE: string;
 	export const _CE_M: string;
 	export const NVIM: string;
@@ -44,6 +46,7 @@ declare module '$env/static/private' {
 	export const LESS_TERMCAP_so: string;
 	export const LC_ADDRESS: string;
 	export const JAVA_HOME: string;
+	export const DOTNET_ROOT: string;
 	export const LC_NAME: string;
 	export const MEMORY_PRESSURE_WRITE: string;
 	export const COLOR: string;
@@ -51,6 +54,7 @@ declare module '$env/static/private' {
 	export const NVIM_LOG_FILE: string;
 	export const LC_MONETARY: string;
 	export const HL_INITIAL_WORKSPACE_TOKEN: string;
+	export const NO_AT_BRIDGE: string;
 	export const npm_config_globalconfig: string;
 	export const XCURSOR_SIZE: string;
 	export const EDITOR: string;
@@ -60,12 +64,15 @@ declare module '$env/static/private' {
 	export const LOGNAME: string;
 	export const XDG_SESSION_DESKTOP: string;
 	export const QT_QPA_PLATFORMTHEME: string;
+	export const DOTNET_TOOLS_PATH: string;
 	export const XDG_SESSION_TYPE: string;
 	export const npm_config_init_module: string;
 	export const SYSTEMD_EXEC_PID: string;
 	export const PATH_TO_FX: string;
 	export const _: string;
+	export const VSCODE_GIT_ASKPASS_NODE: string;
 	export const MOTD_SHOWN: string;
+	export const VSCODE_INJECTION: string;
 	export const HOME: string;
 	export const LANG: string;
 	export const LC_PAPER: string;
@@ -75,10 +82,14 @@ declare module '$env/static/private' {
 	export const npm_package_version: string;
 	export const MEMORY_PRESSURE_WATCH: string;
 	export const WAYLAND_DISPLAY: string;
+	export const GIT_ASKPASS: string;
 	export const INVOCATION_ID: string;
 	export const INIT_CWD: string;
+	export const DOTNET_BUNDLE_EXTRACT_BASE_DIR: string;
+	export const CHROME_DESKTOP: string;
 	export const ALACRITTY_SOCKET: string;
 	export const npm_lifecycle_script: string;
+	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 	export const npm_config_npm_version: string;
 	export const XDG_SESSION_CLASS: string;
 	export const LC_IDENTIFICATION: string;
@@ -90,7 +101,9 @@ declare module '$env/static/private' {
 	export const LESS_TERMCAP_md: string;
 	export const _CE_CONDA: string;
 	export const npm_config_prefix: string;
+	export const ZDOTDIR: string;
 	export const USER: string;
+	export const VSCODE_GIT_IPC_HANDLE: string;
 	export const CONDA_SHLVL: string;
 	export const HYPRLAND_INSTANCE_SIGNATURE: string;
 	export const DISPLAY: string;
@@ -112,11 +125,14 @@ declare module '$env/static/private' {
 	export const DEBUGINFOD_URLS: string;
 	export const npm_package_json: string;
 	export const LC_TIME: string;
+	export const VSCODE_GIT_ASKPASS_MAIN: string;
+	export const GDK_BACKEND: string;
 	export const npm_config_noproxy: string;
 	export const PATH: string;
 	export const npm_config_node_gyp: string;
 	export const ALACRITTY_LOG: string;
 	export const QT_ENABLE_HIGHDPI_SCALING: string;
+	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const DBUS_SESSION_BUS_ADDRESS: string;
 	export const npm_config_global_prefix: string;
 	export const MAIL: string;
@@ -126,6 +142,7 @@ declare module '$env/static/private' {
 	export const npm_config_engine_strict: string;
 	export const LC_NUMERIC: string;
 	export const OLDPWD: string;
+	export const TERM_PROGRAM: string;
 	export const NODE_ENV: string;
 }
 
@@ -162,11 +179,13 @@ declare module '$env/dynamic/private' {
 		npm_command: string;
 		LSCOLORS: string;
 		WINDOWID: string;
+		USER_ZDOTDIR: string;
 		npm_config_userconfig: string;
 		COLORTERM: string;
 		HYPRLAND_CMD: string;
 		npm_config_cache: string;
 		LESS: string;
+		TERM_PROGRAM_VERSION: string;
 		CONDA_EXE: string;
 		_CE_M: string;
 		NVIM: string;
@@ -176,6 +195,7 @@ declare module '$env/dynamic/private' {
 		LESS_TERMCAP_so: string;
 		LC_ADDRESS: string;
 		JAVA_HOME: string;
+		DOTNET_ROOT: string;
 		LC_NAME: string;
 		MEMORY_PRESSURE_WRITE: string;
 		COLOR: string;
@@ -183,6 +203,7 @@ declare module '$env/dynamic/private' {
 		NVIM_LOG_FILE: string;
 		LC_MONETARY: string;
 		HL_INITIAL_WORKSPACE_TOKEN: string;
+		NO_AT_BRIDGE: string;
 		npm_config_globalconfig: string;
 		XCURSOR_SIZE: string;
 		EDITOR: string;
@@ -192,12 +213,15 @@ declare module '$env/dynamic/private' {
 		LOGNAME: string;
 		XDG_SESSION_DESKTOP: string;
 		QT_QPA_PLATFORMTHEME: string;
+		DOTNET_TOOLS_PATH: string;
 		XDG_SESSION_TYPE: string;
 		npm_config_init_module: string;
 		SYSTEMD_EXEC_PID: string;
 		PATH_TO_FX: string;
 		_: string;
+		VSCODE_GIT_ASKPASS_NODE: string;
 		MOTD_SHOWN: string;
+		VSCODE_INJECTION: string;
 		HOME: string;
 		LANG: string;
 		LC_PAPER: string;
@@ -207,10 +231,14 @@ declare module '$env/dynamic/private' {
 		npm_package_version: string;
 		MEMORY_PRESSURE_WATCH: string;
 		WAYLAND_DISPLAY: string;
+		GIT_ASKPASS: string;
 		INVOCATION_ID: string;
 		INIT_CWD: string;
+		DOTNET_BUNDLE_EXTRACT_BASE_DIR: string;
+		CHROME_DESKTOP: string;
 		ALACRITTY_SOCKET: string;
 		npm_lifecycle_script: string;
+		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 		npm_config_npm_version: string;
 		XDG_SESSION_CLASS: string;
 		LC_IDENTIFICATION: string;
@@ -222,7 +250,9 @@ declare module '$env/dynamic/private' {
 		LESS_TERMCAP_md: string;
 		_CE_CONDA: string;
 		npm_config_prefix: string;
+		ZDOTDIR: string;
 		USER: string;
+		VSCODE_GIT_IPC_HANDLE: string;
 		CONDA_SHLVL: string;
 		HYPRLAND_INSTANCE_SIGNATURE: string;
 		DISPLAY: string;
@@ -244,11 +274,14 @@ declare module '$env/dynamic/private' {
 		DEBUGINFOD_URLS: string;
 		npm_package_json: string;
 		LC_TIME: string;
+		VSCODE_GIT_ASKPASS_MAIN: string;
+		GDK_BACKEND: string;
 		npm_config_noproxy: string;
 		PATH: string;
 		npm_config_node_gyp: string;
 		ALACRITTY_LOG: string;
 		QT_ENABLE_HIGHDPI_SCALING: string;
+		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		DBUS_SESSION_BUS_ADDRESS: string;
 		npm_config_global_prefix: string;
 		MAIL: string;
@@ -258,6 +291,7 @@ declare module '$env/dynamic/private' {
 		npm_config_engine_strict: string;
 		LC_NUMERIC: string;
 		OLDPWD: string;
+		TERM_PROGRAM: string;
 		NODE_ENV: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;

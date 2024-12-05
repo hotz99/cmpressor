@@ -1,20 +1,19 @@
-CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash TEXT NOT NULL,
+CREATE TABLE subscription_plans (
+    subscription_plan_id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    max_file_size_megabytes INT NOT NULL,
+    max_conversion_mins INT NOT NULL,
+    max_concurrent_conversions INT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE videos (
-    video_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(user_id) ON DELETE SET NULL,
-    title VARCHAR(100) NOT NULL,
-    description TEXT,
-    s3_url TEXT NOT NULL,
-    thumbnail_url TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    views INT DEFAULT 0,
-    likes INT DEFAULT 0
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    subscription_plan_id INT NOT NULL REFERENCES subscription_plans(subscription_plan_id),
+    remaining_conversion_mins INT NOT NULL,
+    current_concurrent_conversions INT NOT NULL,
+    reset_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
