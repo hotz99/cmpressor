@@ -26,14 +26,24 @@ pub fn compress_video(
         .spawn()?;
 
     let stdin = ffmpeg.stdin.as_mut().unwrap();
-    stdin.write_all(video_data)?;
+
+    stdin.write_all(video_data).map_err(|e| {
+        format!(
+            "failed to write video data to ffmpeg stdin: {}",
+            e.to_string()
+        )
+    })?;
 
     if let Err(err) = ffmpeg.wait() {
         return Err(format!("ffmpeg failed to perform compression: {}", err).into());
     } else {
-        let read_result = std::fs::read(&output_file_path)?;
-        std::fs::remove_file(&output_file_path)?;
-        return Ok(read_result);
+        let read_result = std::fs::read(&output_file_path)
+            .map_err(|e| format!("failed to read file at: {}: {}", output_file_path, e))?;
+
+        std::fs::remove_file(&output_file_path)
+            .map_err(|e| format!("failed to remove file at: {}: {}", output_file_path, e))?;
+
+        Ok(read_result)
     }
 }
 

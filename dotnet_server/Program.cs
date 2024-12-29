@@ -204,7 +204,8 @@ app.MapPost("/upload", async (HttpContext context, IFormFile videoFile,
     {
       VideoBytes = Google.Protobuf.ByteString.CopyFrom(ms.ToArray()),
       OutputFormat = parsedOutputFormat,
-      Codec = parsedCodec    });
+      Codec = parsedCodec
+    });
 
 
     return await compressionTask;

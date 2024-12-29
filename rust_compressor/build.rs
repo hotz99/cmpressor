@@ -6,7 +6,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     //    .file_descriptor_set_path(out_dir.join("compression_service_descriptor.bin"))
     //    .compile_protos(&["../proto/compression.proto"], &["../proto"])?;
     //
-    prost_build::compile_protos(&["../proto/compression.proto"], &["../proto"])
+    prost_build::Config::new()
+        .protoc_arg("--experimental_allow_proto3_optional")
+        .compile_protos(&["../proto/compression.proto"], &["../proto"])
         .expect("failed to compile proto");
 
     Ok(())

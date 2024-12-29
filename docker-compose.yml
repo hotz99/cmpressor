@@ -5,8 +5,8 @@ services:
       # 100MB max frame size
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit max_message_size 104857600
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "${RABBITMQ_HOST_PORT}:${RABBITMQ_CONTAINER_PORT}"
+      - "${RABBITMQ_DASHBOARD_HOST_PORT}:${RABBITMQ_DASHBOARD_CONTAINER_PORT}"
     networks:
       - backend_network
     healthcheck:
@@ -19,9 +19,9 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB_NAME: ${POSTGRES_DB_NAME}
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_CONTAINER_PORT}
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./sql_scripts:/docker-entrypoint-initdb.d/
@@ -31,7 +31,7 @@ services:
     networks:
       - backend_network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB_NAME} -U $${POSTGRES_USER}" ]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -43,8 +43,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_LISTEN_PORT: 80
     ports:
-      - 15432:80
-    volumes: 
+      - ${PGADMIN_HOST_PORT}:${PGADMIN_CONTAINER_PORT}
+    volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
       postgres:
@@ -52,41 +52,64 @@ services:
     networks:
       - backend_network
 
-  dotnet_server:
-    build: 
-      context: ./dotnet_server
-      dockerfile: Dockerfile
+  aspnet_server:
+    build:
+      context: .
+      dockerfile: ./aspnet_server/Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     ports:
-      - 3000:3000
+      - ${ASPNET_HOST_PORT}:${ASPNET_CONTAINER_PORT}
     environment:
       - ASPNETCORE_URLS=http://+:3000
-      - DB_HOST=postgres
-      - DB_PORT=5432
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_CONTAINER_PORT}
+      - DB_HOST=${POSTGRES_HOST}
+      - DB_PORT=${POSTGRES_PORT}
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
-      - DB_NAME=${POSTGRES_DB}
+      - DB_NAME=${POSTGRES_DB_NAME}
+    networks:
+      - backend_network
+
+  rust_compressor:
+    build:
+      context: .
+      dockerfile: ./rust_compressor/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_CONTAINER_PORT}
     networks:
       - backend_network
 
   sveltekit_server:
-    build: 
-      context: ./sveltekit_server
-      dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: ./sveltekit_server/Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - 5000:5000
+      - ${SVELTEKIT_HOST_PORT}:${SVELTEKIT_CONTAINER_PORT}
+    # sveltekit overrides docker defined ports above with env variable `PORT` 
     environment:
-      PORT: 5000
+      PORT: ${SVELTEKIT_HOST_PORT}
     networks:
       - backend_network
 
 networks:
   backend_network:
+
 
 volumes:
   pg_data:

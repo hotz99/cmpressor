@@ -23,33 +23,39 @@
   let selectedCodec = $state("H264");
 
   $effect(() => {
-    if (selectedFileSource?.value === "device") {
+    // console.log($inputFilesStore);
+    if (
+      $inputFilesStore.length === 0 &&
+      selectedFileSource?.value === "device"
+    ) {
       console.log("device selected");
       const fileInput = document.getElementById(
         "filesInput",
       ) as HTMLInputElement;
       fileInput.click();
-    } else if (selectedFileSource?.value === "cloud") {
+    } else if (
+      $inputFilesStore.length === 0 &&
+      selectedFileSource?.value === "cloud"
+    ) {
       console.log("cloud selected");
     }
+
+    // console.log("selected format changed to", selectedFormat);
+
+    // // avoids infinite $effect loop
+    // if (
+    //   $inputFilesStore.every((file) => file.outputFormat === selectedFormat)
+    // ) {
+    //   return;
+    // }
+
+    // $inputFilesStore = $inputFilesStore.map((file) => ({
+    //   ...file,
+    //   outputFormat: selectedFormat,
+    // }));
+
+    // console.log($inputFilesStore);
   });
-
-  // $effect(() => {
-  //   // avoids infinite $effect loop, somehow
-  //   // i ought to read the docs
-  //   if (
-  //     $inputFilesStore.every((file) => file.outputFormat === selectedFormat)
-  //   ) {
-  //     return;
-  //   }
-
-  //   $inputFilesStore = $inputFilesStore.map((file) => ({
-  //     ...file,
-  //     outputFormat: selectedFormat,
-  //   }));
-
-  //   console.log("$effect: output format changed to", selectedFormat);
-  // });
 
   function handleFilesChange(event: Event) {
     const newFiles = Array.from(
@@ -151,7 +157,11 @@
               </div>
               <div class="flex flex-row space-x-4 items-center">
                 <span>Output:</span>
-                <Select.Root type="single" bind:value={file.outputFormat}>
+                <Select.Root
+                  type="single"
+                  bind:value={file.outputFormat}
+                  on:change={() => console.log("fuck")}
+                >
                   <Select.Trigger>
                     {file.outputFormat}
                   </Select.Trigger>

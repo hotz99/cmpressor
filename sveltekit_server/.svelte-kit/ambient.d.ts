@@ -41,7 +41,9 @@ declare module '$env/static/private' {
 	export const _CE_M: string;
 	export const NVIM: string;
 	export const XDG_BACKEND: string;
+	export const VSCODE_INSPECTOR_OPTIONS: string;
 	export const NODE: string;
+	export const NODE_OPTIONS: string;
 	export const LESS_TERMCAP_se: string;
 	export const LESS_TERMCAP_so: string;
 	export const LC_ADDRESS: string;
@@ -190,7 +192,9 @@ declare module '$env/dynamic/private' {
 		_CE_M: string;
 		NVIM: string;
 		XDG_BACKEND: string;
+		VSCODE_INSPECTOR_OPTIONS: string;
 		NODE: string;
+		NODE_OPTIONS: string;
 		LESS_TERMCAP_se: string;
 		LESS_TERMCAP_so: string;
 		LC_ADDRESS: string;

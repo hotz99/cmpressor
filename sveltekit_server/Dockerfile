@@ -1,15 +1,20 @@
-FROM node:23.1-alpine AS builder
+FROM node:23.1-alpine
+
 WORKDIR /app
-COPY package*.json ./
+
+# copy package files and install dependencies
+COPY ./sveltekit_server/package*.json ./
 RUN npm ci
-COPY . .
+
+# copy the rest of the application code
+COPY ./sveltekit_server/ .
+
 RUN npm run build
+
 RUN npm prune --production
 
-FROM node:23.1-alpine
-WORKDIR /app
-COPY --from=builder /app/build build/
-COPY --from=builder /app/node_modules node_modules/
-COPY package.json .
 ENV NODE_ENV=production
+
+EXPOSE 3000
+
 CMD [ "node", "build" ]
