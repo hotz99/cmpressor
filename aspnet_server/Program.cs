@@ -1,16 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Compression.Protobuf;
-using Microsoft.AspNetCore.Authorization;
-using Dapper;
-using Npgsql;
-using database;
 using repositories;
 using services;
 
-const string WEB_CLIENT_URL = "http://localhost:5173";
+const string WEB_CLIENT_URL = "http://localhost:5000";
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +16,13 @@ var builder = WebApplication.CreateBuilder(args);
 
   services.AddCors(options =>
 {
+  options.AddPolicy("AllowAll",
+        policy =>
+        {
+          policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
   options.AddPolicy("AllowSpecificOrigin",
       policy =>
         policy.WithOrigins(WEB_CLIENT_URL)
@@ -44,15 +46,42 @@ var builder = WebApplication.CreateBuilder(args);
 
   var dbConnString = $"Host={dbHost};Port={dbPort};Username={dbUser};Password={dbPassword};Database={dbName}";
 
-  services.Configure<DbSettings>(builder.Configuration.GetSection("DbSettings"));
-  // services.AddSingleton<DbSettings>(new DbSettings
-  // (
-  //   !String.IsNullOrEmpty(dbHost) ? dbHost : "localhost",
-  //   !String.IsNullOrEmpty(dbPort) ? dbPort : "5432",
-  //   !String.IsNullOrEmpty(dbUser) ? dbUser : "postgres",
-  //   !String.IsNullOrEmpty(dbPassword) ? dbPassword : "password",
-  //   !String.IsNullOrEmpty(dbName) ? dbName : "postgres"
-  // ));
+  services.Configure<database.DbSettings>(options =>
+  {
+    options.Host = dbHost ?? "localhost";
+    options.Port = dbPort ?? "5432";
+    options.Username = dbUser ?? "postgres";
+    options.Password = dbPassword ?? "postgres";
+    options.Database = dbName ?? "postgres";
+  });
+
+  services.AddSingleton<database.DapperContext>();
+  services.AddScoped<IUserRepository, UserRepository>();
+  services.AddScoped<IUserService, UserService>();
+
+  var rabbitmqUser = Environment.GetEnvironmentVariable("RABBITMQ_USER") ?? "guest";
+  var rabbitmqPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
+  var rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
+  var rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT") ?? "5672";
+
+  var rabbitmqUri = $"amqp://{rabbitmqUser}:{rabbitmqPassword}@{rabbitmqHost}:{rabbitmqPort}";
+
+  Console.WriteLine($"rabbitmqUri: {rabbitmqUri}");
+
+  services.AddSingleton<RabbitMQ.Client.ConnectionFactory>(new RabbitMQ.Client.ConnectionFactory
+  {
+    Uri = new Uri(rabbitmqUri)
+  });
+
+  services.Configure<rabbitmq.RabbitmqSettings>(options =>
+  {
+    options.Host = rabbitmqHost;
+    options.Port = rabbitmqPort;
+    options.Username = rabbitmqUser;
+    options.Password = rabbitmqPassword;
+  });
+
+  services.AddSingleton<rabbitmq.RpcProducer>();
 
   var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<util.JwtSettings>();
   services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -71,10 +100,6 @@ var builder = WebApplication.CreateBuilder(args);
 
   services.AddSingleton<util.JwtSettings>(jwtSettings);
 
-  services.AddSingleton<DataContext>();
-  services.AddScoped<IUserRepository, UserRepository>();
-  services.AddScoped<IUserService, UserService>();
-
   services.AddAuthorization(options =>
   {
     options.AddPolicy("PaidUser", policy =>
@@ -82,15 +107,6 @@ var builder = WebApplication.CreateBuilder(args);
       policy.RequireClaim("SubscriptionType", "Paid");
     });
   });
-
-  services.AddSingleton<RabbitMQ.Client.ConnectionFactory>(new RabbitMQ.Client.ConnectionFactory
-  {
-    // TODO use env vars
-    HostName = "localhost",
-    Port = 5672
-  });
-
-  services.AddSingleton<RabbitmqRpc.RpcProducer>();
 
   services.AddSingleton<Handlers>();
 
@@ -102,7 +118,7 @@ var app = builder.Build();
 
 {
   using var scope = app.Services.CreateScope();
-  var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+  var context = scope.ServiceProvider.GetRequiredService<database.DapperContext>();
   await context.Init();
 
   var connection = context.CreateConnection();
@@ -112,8 +128,7 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("AllowSpecificOrigin");
-
+app.UseCors("AllowAll");
 
 app.Use(async (context, next) =>
 {
@@ -130,10 +145,12 @@ app.Use(async (context, next) =>
 });
 
 {
-  var producer = app.Services.GetRequiredService<RabbitmqRpc.RpcProducer>();
+  var producer = app.Services.GetRequiredService<rabbitmq.RpcProducer>();
   await producer.StartAsync();
 
 }
+
+app.MapGet("/", () => "yes hello");
 
 app.MapPost("/users/signup", async ([FromBody] models.users.CreateRequest user, IUserService userService) =>
 {
