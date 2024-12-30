@@ -24,38 +24,6 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<User>> GetAll()
-    {
-        using var connection = _context.CreateConnection();
-        var sql = """
-            SELECT * FROM users
-        """;
-        return await connection.QueryAsync<User>(sql);
-    }
-
-    public async Task<User> GetById(int id)
-    {
-        using var connection = _context.CreateConnection();
-        var sql = """
-            SELECT * FROM users 
-            WHERE user_id = @id
-        """;
-        return await connection.QuerySingleOrDefaultAsync<User>(sql, new { id });
-    }
-
-    public async Task<User> GetByEmail(string email)
-    {
-        using var connection = _context.CreateConnection();
-        var sql = """
-            SELECT * FROM users
-            WHERE email = @email
-        """;
-
-        System.Console.WriteLine("sql: " + sql);
-
-        return await connection.QuerySingleOrDefaultAsync<User>(sql, new { email });
-    }
-
     public async Task Create(User user)
     {
         using var connection = _context.CreateConnection();
@@ -87,6 +55,34 @@ public class UserRepository : IUserRepository
         await connection.ExecuteAsync(sql, parameters);
     }
 
+    public async Task<IEnumerable<User>> GetAll()
+    {
+        using var connection = _context.CreateConnection();
+        var sql = """
+            SELECT * FROM users
+        """;
+        return await connection.QueryAsync<User>(sql);
+    }
+
+    public async Task<User> GetById(int id)
+    {
+        using var connection = _context.CreateConnection();
+        var sql = """
+            SELECT * FROM users 
+            WHERE user_id = @id
+        """;
+        return await connection.QuerySingleOrDefaultAsync<User>(sql, new { id });
+    }
+
+    public async Task<User> GetByEmail(string email)
+    {
+        using var connection = _context.CreateConnection();
+        var sql = """
+            SELECT * FROM users
+            WHERE email = @email
+        """;
+        return await connection.QuerySingleOrDefaultAsync<User>(sql, new { email });
+    }
 
     public async Task Update(User user)
     {

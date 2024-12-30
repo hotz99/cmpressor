@@ -1,6 +1,5 @@
 using AutoMapper;
 using repositories;
-using entities;
 using models.users;
 using exceptions;
 using util;
@@ -10,13 +9,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace services;
+
+// do we really need interfaces ?
 public interface IUserService
 {
     Task<string> GenerateToken(entities.User user);
-    Task<IEnumerable<User>> GetAll();
-    Task<User> GetById(int id);
-    Task<User> GetByEmail(string email);
-    Task<string> Create(CreateRequest model);
+    Task<IEnumerable<entities.User>> GetAll();
+    Task<entities.User> GetById(int id);
+    Task<entities.User> GetByEmail(string email);
+    Task<Result<string>> Create(CreateRequest model);
     Task Update(int id, UpdateRequest model);
     Task Delete(int id);
 }
@@ -45,6 +46,7 @@ public class UserService : IUserService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            // more claims means less db lookups
             Subject = new ClaimsIdentity(
             [
             new Claim("UserId", user.UserId.ToString()),
@@ -63,39 +65,27 @@ public class UserService : IUserService
     }
 
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IEnumerable<entities.User>> GetAll()
     {
         return await _userRepository.GetAll();
     }
 
-    public async Task<User> GetById(int id)
+    public async Task<entities.User> GetById(int id)
     {
-        var user = await _userRepository.GetById(id);
-
-        if (user == null)
-            throw new KeyNotFoundException("User not found");
-
-        return user;
+        return await _userRepository.GetById(id);
     }
 
-    public async Task<User> GetByEmail(string email)
+    public async Task<entities.User> GetByEmail(string email)
     {
-        var user = await _userRepository.GetByEmail(email);
-
-        if (user == null)
-            throw new KeyNotFoundException("User not found");
-
-        return user;
+        return await _userRepository.GetByEmail(email);
     }
 
-    public async Task<string> Create(CreateRequest model)
+    public async Task<Result<string>> Create(CreateRequest model)
     {
-        // validate
         if (await _userRepository.GetByEmail(model.Email!) != null)
-            throw new AppException("User with the email '" + model.Email + "' already exists");
+            return Result<string>.Failure("User with this email already exists.");
 
-        // map model to new user object
-        var user = _mapper.Map<User>(model);
+        var user = _mapper.Map<entities.User>(model);
 
         // hash password
         var updatedUser = user with { PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password) };
@@ -103,7 +93,7 @@ public class UserService : IUserService
         // save user
         await _userRepository.Create(updatedUser);
 
-        return await GenerateToken(updatedUser);
+        return Result<string>.Success(await GenerateToken(updatedUser));
     }
 
     public async Task Update(int id, UpdateRequest model)

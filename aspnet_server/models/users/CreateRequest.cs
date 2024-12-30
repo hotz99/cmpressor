@@ -3,6 +3,7 @@ using entities;
 
 namespace models.users;
 
+// TODO models vs DTOs ?
 public class CreateRequest
 {
     [Required]

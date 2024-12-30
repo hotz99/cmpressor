@@ -79,6 +79,7 @@
     ];
   }
 
+  // TODO why does CORS allow this request from browser, but not signin/signup ?
   async function handleRequest(file: File, outputFormat: string) {
     const formData = new FormData();
     formData.append("videoFile", file);

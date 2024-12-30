@@ -10,3 +10,5 @@ paid tier:
 100MB maximum file size
 200 conversion mins/month  
 15  conversions at a time
+
+optimize docker images (e.g. smaller base images, layer caching)

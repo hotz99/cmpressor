@@ -1,4 +1,10 @@
 {
 	"/": [],
-	"/download": []
+	"/download": [],
+	"/sign_in": [
+		"src/routes/sign_in/+page.server.ts"
+	],
+	"/sign_up": [
+		"src/routes/sign_up/+page.server.ts"
+	]
 }

@@ -125,10 +125,16 @@ var app = builder.Build();
   await context.SeedSubscriptionPlansAsync(connection);
 }
 
+
+app.UseCors("AllowSpecificOrigin");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("AllowAll");
+if (app.Environment.IsDevelopment())
+{
+  app.UseDeveloperExceptionPage();
+}
 
 app.Use(async (context, next) =>
 {
@@ -152,14 +158,20 @@ app.Use(async (context, next) =>
 
 app.MapGet("/", () => "yes hello");
 
-app.MapPost("/users/signup", async ([FromBody] models.users.CreateRequest user, IUserService userService) =>
+app.MapPost("/users/sign_up", async ([FromBody] models.users.CreateRequest model, IUserService userService) =>
 {
-  // TODO error handling e.g. if user already exists
-  await userService.Create(user);
-  return Results.Ok();
+  Console.WriteLine($"signup request: {model.Email} : {model.Password}");
+
+  var result = await userService.Create(model);
+
+  if (!result.IsSuccess)
+    Console.WriteLine($"failed to create user: {result.ErrorMessage}");
+    return Results.BadRequest(new { Message = result.ErrorMessage });
+
+  return Results.Ok(new { Token = result.Value });
 });
 
-app.MapPost("/users/signin", async (IUserService userService, [FromBody] models.users.CreateRequest user) =>
+app.MapPost("/users/sign_in", async (IUserService userService, [FromBody] models.users.CreateRequest user) =>
 {
   // TODO should this should be done in a middleware ?
   if (user == null)
@@ -167,10 +179,13 @@ app.MapPost("/users/signin", async (IUserService userService, [FromBody] models.
     return Results.BadRequest("invalid request");
   }
 
+  Console.WriteLine($"signin request: {user.Email} : {user.Password}");
+
   // TODO encapsulate this in a service, use it also in signup
   var foundUser = await userService.GetByEmail(user.Email);
 
-  if (foundUser == null)
+  // TODO `is null` vs `== null` ?
+  if (foundUser is null)
   {
     return Results.BadRequest("user not found");
   }
