@@ -25,10 +25,10 @@ export const actions = {
 
       const data = await response.json();
 
-      return { success: true, message: 'Sign-up successful!', user: data };
+      return { success: true, message: 'Sign-up successful', user: data };
     } catch (err) {
-      console.error('Error during sign-up:', err);
-      throw error(500, 'Failed to sign up');
+      console.error('Error during sign-up request:', err);
+      throw error(500, 'Failed to send sign-up request');
     }
   },
 };

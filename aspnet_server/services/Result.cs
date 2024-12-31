@@ -1,3 +1,5 @@
+namespace services;
+
 // result type for error handling, Rust style
 public class Result<T>
 {

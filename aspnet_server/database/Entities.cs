@@ -10,7 +10,8 @@ public record User
     [JsonIgnore]
     public string PasswordHash { get; init; } = string.Empty;
 
-    public SubscriptionPlan? SubscriptionPlan { get; init; }
+    // TODO initialize with default (free) plan
+    public SubscriptionPlan SubscriptionPlan { get; init; }
 
     public int RemainingConversionMins { get; init; }
     public int CurrentConcurrentConversions { get; init; }

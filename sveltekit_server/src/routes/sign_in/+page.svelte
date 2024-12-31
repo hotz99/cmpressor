@@ -1,5 +1,5 @@
 <script>
-  export let form; // Exposes form handling results
+  export let form;
 </script>
 
 <h1>Sign In</h1>
@@ -25,4 +25,3 @@
 {#if form?.success}
   <p style="color: green;">Sign-in successful! Token: {form.token}</p>
 {/if}
-

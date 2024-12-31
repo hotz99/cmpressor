@@ -56,8 +56,13 @@ var builder = WebApplication.CreateBuilder(args);
   });
 
   services.AddSingleton<database.DapperContext>();
+  // TODO why not singletons ?
   services.AddScoped<IUserRepository, UserRepository>();
   services.AddScoped<IUserService, UserService>();
+
+  services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
+  services.AddScoped<ISubscriptionService, SubscriptionService>();
+  services.AddMemoryCache();
 
   var rabbitmqUser = Environment.GetEnvironmentVariable("RABBITMQ_USER") ?? "guest";
   var rabbitmqPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
@@ -68,7 +73,7 @@ var builder = WebApplication.CreateBuilder(args);
 
   Console.WriteLine($"rabbitmqUri: {rabbitmqUri}");
 
-  services.AddSingleton<RabbitMQ.Client.ConnectionFactory>(new RabbitMQ.Client.ConnectionFactory
+  services.AddSingleton(new RabbitMQ.Client.ConnectionFactory
   {
     Uri = new Uri(rabbitmqUri)
   });
@@ -84,6 +89,8 @@ var builder = WebApplication.CreateBuilder(args);
   services.AddSingleton<rabbitmq.RpcProducer>();
 
   var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<util.JwtSettings>();
+  services.AddSingleton<util.JwtSettings>(jwtSettings);
+
   services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
           .AddJwtBearer(options =>
           {
@@ -98,18 +105,14 @@ var builder = WebApplication.CreateBuilder(args);
             };
           });
 
-  services.AddSingleton<util.JwtSettings>(jwtSettings);
-
   services.AddAuthorization(options =>
   {
-    options.AddPolicy("PaidUser", policy =>
-    {
-      policy.RequireClaim("SubscriptionType", "Paid");
-    });
+    options.AddPolicy("RequireSubscriptionPlan", policy =>
+    // all tokens will have this claim, but redundancy is fine
+      policy.RequireClaim("SubscriptionPlan"));
   });
 
   services.AddSingleton<Handlers>();
-
 }
 
 
@@ -133,6 +136,7 @@ app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
+  System.Console.WriteLine("we are in development mode");
   app.UseDeveloperExceptionPage();
 }
 
@@ -165,8 +169,10 @@ app.MapPost("/users/sign_up", async ([FromBody] models.users.CreateRequest model
   var result = await userService.Create(model);
 
   if (!result.IsSuccess)
+  {
     Console.WriteLine($"failed to create user: {result.ErrorMessage}");
     return Results.BadRequest(new { Message = result.ErrorMessage });
+  }
 
   return Results.Ok(new { Token = result.Value });
 });
@@ -205,22 +211,17 @@ app.MapPost("/users/sign_in", async (IUserService userService, [FromBody] models
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/parameter-binding?view=aspnetcore-8.0
 // https://andrewlock.net/reading-json-and-binary-data-from-multipart-form-data-sections-in-aspnetcore/
 // TODO bind to protobuf generated class instead ?
-app.MapPost("/upload", async (HttpContext context, IFormFile videoFile,
+app.MapPost("/upload", async (ISubscriptionService subscriptionService, HttpContext context, IFormFile videoFile,
     [FromForm] string outputFormat, [FromForm] string codec, Handlers handlers) =>
 {
   var subscriptionPlan = context.User.FindFirst("SubscriptionPlan")?.Value;
+  var result = subscriptionService.ValidateSubscriptionLimits(subscriptionPlan, (int)videoFile.Length, 10, 1);
 
-  if (subscriptionPlan == "Paid")
+  // TODO should this be done in a middleware ?
+  if (!result.IsSuccess)
   {
-    Console.WriteLine("we got a paid plan user");
+    return Results.BadRequest(new { Message = result.ErrorMessage });
   }
-  else
-  {
-    Console.WriteLine("we got a free plan user");
-  }
-
-  Console.WriteLine($"outputFormat: {outputFormat}");
-  Console.WriteLine($"codec: {codec}");
 
   using (MemoryStream ms = new MemoryStream())
   {

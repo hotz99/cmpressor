@@ -1,14 +1,12 @@
 import { error, redirect } from '@sveltejs/kit';
 
 export const actions = {
-  default: async ({ request, fetch }) => {
-    // Parse the form data from the client
+  default: async ({ request, fetch, cookies }) => {
     const formData = await request.formData();
     const email = formData.get('email');
     const password = formData.get('password');
 
     try {
-      // Make the request to the ASP.NET API from the server-side
       const response = await fetch('http://localhost:3000/users/sign_in', {
         method: 'POST',
         headers: {
@@ -25,12 +23,10 @@ export const actions = {
 
       const { token } = await response.json();
 
-      // Optionally set a cookie with the token
       return { success: true, token };
     } catch (err) {
-      console.error(err);
-      throw error(500, 'Something went wrong');
+      console.error("Error during sign-in request: ", err);
+      throw error(500, 'Failed to send sign-in request');
     }
   },
 };
-

@@ -96,9 +96,6 @@ services:
     build:
       context: .
       dockerfile: ./sveltekit_server/Dockerfile
-    depends_on:
-      postgres:
-        condition: service_healthy
     ports:
       - ${SVELTEKIT_HOST_PORT}:${SVELTEKIT_CONTAINER_PORT}
     # sveltekit overrides docker defined ports above with env variable `PORT` 
